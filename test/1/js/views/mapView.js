@@ -18,10 +18,8 @@ crosslet.MapView = (function(_super) {
 
   MapView.prototype.initialize = function(el, config) {
     var _this = this;
-    this.config = config;
+    this.config = crosslet.createConfig(crosslet.defaultConfig, config);
     this.geoURL = this.config.map.geo.url;
-    if (!this.config.data.id_field) this.config.data.id_field = "id";
-    if (!this.config.map.geo.id_field) this.config.map.geo.id_field = "id";
     this.opacity = this.config.defaults.opacity;
     this.ds = new crosslet.DataStore(this.config);
     this.el = el;

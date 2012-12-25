@@ -19,6 +19,8 @@ barChart=function() {
         fill;
 
     function chart(div) {
+      console.log(div)
+     //debugger;
       var width = x.range()[1],
           height = y.range()[0];
 
@@ -142,7 +144,7 @@ barChart=function() {
 
     brush.on("brushstart.chart", function() {
       var div = d3.select(this.parentNode.parentNode.parentNode);
-      div.select(".title a").style("display", null);
+      //div.select(".title a").style("display", null);
     });
 
     brush.on("brush.chart", function() {
@@ -173,7 +175,7 @@ barChart=function() {
     brush.on("brushend.chart", function() {
       if (brush.empty()) {
         var div = d3.select(this.parentNode.parentNode.parentNode);
-        div.select(".title a").style("display", "none");
+        //div.select(".title a").style("display", "none");
         div.select("#clip-" + id + " rect").attr("x", null).attr("width", "100%");
         dimension.filterAll();
         filter=null

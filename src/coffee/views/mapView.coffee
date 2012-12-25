@@ -1,9 +1,9 @@
 class crosslet.MapView extends Backbone.View
 	initialize: (el,config) ->
-		@config=config
+		@config=crosslet.createConfig(crosslet.defaultConfig,config)
 		@geoURL=@config.map.geo.url
-		@config.data.id_field = "id" if not @config.data.id_field
-		@config.map.geo.id_field = "id" if not @config.map.geo.id_field
+		#@config.data.id_field = "id" if not @config.data.id_field
+		#@config.map.geo.id_field = "id" if not @config.map.geo.id_field
 
 		@opacity=@config.defaults.opacity
 		@ds=new crosslet.DataStore(@config)
@@ -54,6 +54,9 @@ class crosslet.MapView extends Backbone.View
 			@hoverElementText=@hoverElement.append("text").attr("x",0).attr("y",0)
 			@hoverElementTextBB=@hoverElementText.node().getBBox()
 		)
+	
+
+
 	project: (x) =>
 			point = @map.latLngToLayerPoint(new L.LatLng(x[1], x[0]))
 			return [point.x, point.y]		

@@ -16,7 +16,7 @@ crosslet.PanelView = (function(_super) {
 
   PanelView.prototype.initialize = function(el, config, parent) {
     var e, o, _i, _len, _ref;
-    this.config = config;
+    this.config = crosslet.createConfig(crosslet.defaultConfig, config);
     this.parent = parent;
     this.el = el;
     this.ds = parent.ds;
@@ -39,11 +39,12 @@ crosslet.PanelView = (function(_super) {
 
   PanelView.prototype.loaded = function() {
     this.numloads = this.numloads - 1;
-    if (this.numloads === 0) return this.createCube();
+    if (this.numloads <= 0) return this.createCube();
   };
 
   PanelView.prototype._renderMap = function() {
-    var abox, adata, k, keys, out, _i, _len;
+    var abox, adata, f, k, keys, out, _i, _len,
+      _this = this;
     abox = this.boxes[this.active];
     adata = abox.getFilteredData();
     keys = this.intersection(_.map(_.values(this.boxes), function(b) {
@@ -54,9 +55,12 @@ crosslet.PanelView = (function(_super) {
       k = keys[_i];
       out[k] = adata[k];
     }
+    f = abox.config.format.long(abox.config);
     this.parent.renderMap(out, (function(v) {
-      return this.config.defaults.colorscale(abox.config.scale(v));
-    }), abox.config.hover);
+      return abox.config.data.colorscale(abox.config.scale(v));
+    }), function(data, value) {
+      return data.properties[_this.config.map.geo.name_field] + " - " + f(value);
+    });
     return this;
   };
 
@@ -137,11 +141,14 @@ crosslet.PanelView = (function(_super) {
     _ref2 = this.boxes;
     for (bName in _ref2) {
       box = _ref2[bName];
-      d = this.cube.dimension(function(d) {
-        return d[bName];
+      console.log("lala chart" + bName);
+      d = this.cube.dimension(function(dd) {
+        return dd[bName];
       });
-      dg = d.group(getRounder(box.interval[0], box.interval[1], this.width - 20));
-      chart = barChart().dimension(d).name_id(bName).group(dg).x(d3.scale.linear().domain(box.interval).rangeRound([0, this.width - 20])).tickSize(box.config.tickSize).tickFormat(box.config.axisformat(box.config)).fill(this.config.defaults.colorscale);
+      console.log("End of dumen");
+      dg = d.group(getRounder(box.config.data.interval[0], box.config.data.interval[1], this.width - 20));
+      box.graph.empty();
+      chart = barChart().dimension(d).name_id(bName).group(dg).x(d3.scale.linear().domain(box.config.data.interval).rangeRound([0, this.width - 20])).tickSize(box.config.data.tickSize).tickFormat(box.config.format.axis(box.config)).fill(box.config.data.colorscale);
       chart.on("brush", this.renderCubes);
       chart.on("brushend", this.renderCubes);
       this.charts[bName] = chart;
@@ -153,12 +160,15 @@ crosslet.PanelView = (function(_super) {
 
   PanelView.prototype.renderCubes = function() {
     var abox, bName, box, _ref;
+    console.log("renderCubes");
     _ref = this.boxes;
     for (bName in _ref) {
       box = _ref[bName];
+      console.log("before xf");
       box.chart(box.graph);
       $(box.el).on("mousedown", box.event_click);
       box.setFilter(box.chart.filter(), false);
+      console.log("after xf");
     }
     abox = this.boxes[this.active];
     abox.setFilter(abox.chart.filter(), false);
@@ -178,99 +188,77 @@ crosslet.BoxView = (function(_super) {
     this.setFilter = __bind(this.setFilter, this);
     this.event_click = __bind(this.event_click, this);
     this.setActive = __bind(this.setActive, this);
-    this.defaultSubmitForm = __bind(this.defaultSubmitForm, this);
-    this.defaultRenderText = __bind(this.defaultRenderText, this);
-    this.defaultRenderForm = __bind(this.defaultRenderForm, this);
     this.dataLoaded = __bind(this.dataLoaded, this);
     BoxView.__super__.constructor.apply(this, arguments);
   }
 
   BoxView.prototype.initialize = function(el, config, parent, name) {
-    var id, idf;
     this.el = el;
+    this.config = crosslet.createConfig(crosslet.defaultDimensionConfig, config);
+    this.config.id = name;
+    this.config.data.field_func = !_.isFunction(this.config.data.field) ? (function(d) {
+      return d.data.field;
+    }) : this.config.data.field;
     $(this.el)[0].onmousedown = $(this.el)[0].ondblclick = L.DomEvent.stopPropagation;
     $(this.el).on("mousedown", this.event_click);
-    this.legend = $("<div class='legend'></div>");
-    this.legendForm = $("<div class='legendForm'></div>");
-    this.legendText = $("<div class='legendText'></div>");
-    this.legend.append(this.legendText).append(this.legendForm);
-    $(el).append(this.legend);
+    this.legend = {};
+    this.legend.all = $("<div class='legend'></div>");
+    this.legend.text = $("<div class='legendText'></div>");
+    this.legend.text_p = $("<div class='legendText'></div>");
+    this.legend.text_range = $("<div class='legendRange'></div>");
+    this.legend.text.append(this.legend.text_p).append(this.legend.text_range);
+    this.legend.form = $("<div class='legendForm'></div>");
+    this.legend.form_p = $("<div class='legendForm_p'></div>");
+    this.legend.form_range = $("<div class='legendForm_range'></div>");
+    this.legend.form.append(this.legend.form_p).append(this.legend.form_range);
+    this.legend.all.append(this.legend.text).append(this.legend.form);
+    $(el).append(this.legend.all);
     this.graph = $("<div class='graph'></div>");
     $(el).append(this.graph);
-    this.config = config;
-    id = function(d) {
-      return d;
-    };
-    idf = function(d) {
-      return id;
-    };
-    if (!this.config.format) {
-      this.config.format = (function(data) {
-        return d3.format(",.2f");
-      });
-    }
-    if (!this.config.axisformat) this.config.axisformat = this.config.format;
-    if (!this.config.preformat) this.config.preformat = idf;
-    if (!this.config.inputformat) this.config.inputformat = idf;
-    if (!this.config.renderForm) this.config.renderForm = this.defaultRenderForm;
-    if (!this.config.renderText) this.config.renderText = this.defaultRenderText;
-    if (!this.config.submitForm) this.config.submitForm = this.defaultSubmitForm;
-    if (!this.config.method) this.config.method = d3.tsv;
-    this.config.load_url_func = _.isFunction(this.config.load_url) ? this.config.load_url : (function(d) {
-      return d.load_url;
-    });
-    this.config.field_func = _.isFunction(this.config.field) ? this.config.field : (function(d) {
-      return d.field;
-    });
-    if (!this.config.tickSize) this.config.tickSize = 5;
-    this.config.cinputformat = this.config.inputformat(this.config);
     this.parent = parent;
     this.ds = parent.ds;
     this.active = false;
     this.name = name;
-    return this.parent.ds.loadData(this.config.load_url_func(this.config), this.dataLoaded, this.config.method);
+    return this.loadData();
+  };
+
+  BoxView.prototype.loadData = function() {
+    if (_.isString(this.config.data.dataSet)) {
+      console.log("Thats an url");
+      return this.parent.ds.loadData(this.config.data.dataSet, this.dataLoaded, this.config.data.method);
+    } else {
+      if (_.isFunction(this.config.data.dataSet)) {
+        console.log("Thats a function");
+        return this.parent.ds.loadData(this.config.data.dataSet(this.config), this.dataLoaded, this.config.data.method);
+      } else {
+        console.log("Thats an array");
+        return this.dataLoaded(this.config.data.dataSet);
+      }
+    }
   };
 
   BoxView.prototype.dataLoaded = function() {
-    var f, id, val, _ref;
+    var f, id, preformatter, val, _ref;
     this.data = {};
-    f = this.config.field_func(this.config);
+    f = this.config.data.field_func(this.config);
     console.log("Field is " + f);
+    preformatter = this.config.data.preformat(this.config);
     _ref = this.parent.ds.data;
     for (id in _ref) {
       val = _ref[id];
-      if (val[f]) this.data[id] = this.config.preformat(this.config)(val[f]);
+      if (val[f]) this.data[id] = preformatter(val[f]);
     }
-    this.range = [_.min(_.values(this.data)), _.max(_.values(this.data))];
-    this.interval = [_.min(_.values(this.data)), _.max(_.values(this.data))];
+    if (!this.config.data.interval) {
+      this.config.data.interval = [_.min(_.values(this.data)), _.max(_.values(this.data))];
+    }
+    if (!this.config.filter) {
+      this.config.filter = [_.min(_.values(this.data)), _.max(_.values(this.data))];
+    }
     if (!this.config.scale) {
-      this.config.scale = d3.scale.quantize().domain(this.range).range([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]);
+      this.config.scale = d3.scale.quantize().domain(this.config.data.interval).range([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]);
     }
     this.render();
     return this.parent.loaded();
-  };
-
-  BoxView.prototype.defaultRenderForm = function(d, el) {
-    var f, html, size;
-    f = d.title ? d.title : d.field_func(d);
-    html = '<h2>' + f + '<h2>';
-    size = _.max(_.map(this.interval, function(d) {
-      return ("_" + d).length - 1;
-    }));
-    html = html + "Range: <input type='text' name='m0' size='" + size + "' value='" + this.interval[0] + "'> &ndash; <input type='text' name='m1' size='3' value='" + this.interval[1] + "'>";
-    return el.html(html);
-  };
-
-  BoxView.prototype.defaultRenderText = function(d, el) {
-    var f, html;
-    f = d.title ? d.title : d.field_func(d);
-    html = '<h2>' + f + '</h2>';
-    html = html + "<p><span class='m0'>" + d.format(d)(this.interval[0]) + "</span> &ndash; <span class='m1'>" + d.format(d)(this.interval[1]) + "</span></p>";
-    return el.html(html);
-  };
-
-  BoxView.prototype.defaultSubmitForm = function(d, el) {
-    return {};
   };
 
   BoxView.prototype.setActive = function(isActive) {
@@ -289,28 +277,23 @@ crosslet.BoxView = (function(_super) {
 
   BoxView.prototype.setFilter = function(f, redrawCube) {
     if (redrawCube == null) redrawCube = false;
-    if (f) {
-      this.filterElements[0].val(this.config.cinputformat(f[0]));
-      this.filterElements[1].val(this.config.cinputformat(f[1]));
-      $(this.legend).find(".m0").text(this.config.format(this.config)(f[0]));
-      $(this.legend).find(".m1").text(this.config.format(this.config)(f[1]));
-    } else {
-      this.filterElements[0].val(this.config.cinputformat(this.interval[0]));
-      this.filterElements[1].val(this.config.cinputformat(this.interval[1]));
-      $(this.legend).find(".m0").text(this.config.format(this.config)(this.interval[0]));
-      $(this.legend).find(".m1").text(this.config.format(this.config)(this.interval[1]));
-    }
     if (redrawCube) {
       this.chart.filter(f);
       this.parent.renderCubes();
     }
+    if (!f) f = this.config.data.interval;
+    this.config.filter = f;
+    this.filterElements[0].val(this.config.format.input(this.config)(f[0]));
+    this.filterElements[1].val(this.config.format.input(this.config)(f[1]));
+    $(this.legend.text_range).find(".m0").text(this.config.format.short(this.config)(f[0]));
+    $(this.legend.text_range).find(".m1").text(this.config.format.short(this.config)(f[1]));
     return this;
   };
 
   BoxView.prototype.getFilteredData = function() {
     var f, k, out, v, _ref, _ref2;
     if (!this.chart.filter()) return this.data;
-    f = (_ref = this.chart.filter()) != null ? _ref : this.interval;
+    f = (_ref = this.chart.filter()) != null ? _ref : this.config.data.interval;
     out = {};
     _ref2 = this.data;
     for (k in _ref2) {
@@ -320,10 +303,36 @@ crosslet.BoxView = (function(_super) {
     return out;
   };
 
+  BoxView.prototype.renderRange = function() {
+    this.config.render.range(this.config, this.legend.text_range);
+    return this.config.render.rangeForm(this.config, this.legend.form_range);
+  };
+
   BoxView.prototype.render = function() {
-    this.config.renderForm(this.config, this.legendForm);
-    this.config.renderText(this.config, this.legendText);
-    return this.filterElements = [$(this.legend).find("input[name=m0]"), $(this.legend).find("input[name=m1]")];
+    var _this = this;
+    this.config.render.legend(this.config, this.legend.text_p);
+    this.config.render.form(this.config, this.legend.form_p);
+    this.renderRange();
+    $(this.legend.form_range).find("input").on("change", function() {
+      var f;
+      f = [+_this.filterElements[0].val(), +_this.filterElements[1].val()];
+      if (f[0] > f[1]) f.reverse();
+      f[0] = _.max([_this.config.data.interval[0], f[0]]);
+      f[1] = _.min([_this.config.data.interval[1], f[1]]);
+      if (_.isEqual(f, _this.config.data.interval)) f = null;
+      return _this.setFilter(f, true);
+    });
+    $(this.legend.form_p).find("input, select").on("change", function() {
+      var p;
+      _this.config.data.interval = null;
+      _this.config.scale = null;
+      _this.config.filter = null;
+      p = _this.config.submitter(_this.config, _this.legend.form_p);
+      _this.config.p = p;
+      console.log(p);
+      return _this.loadData();
+    });
+    return this.filterElements = [$(this.legend.form_range).find("input[name=m0]"), $(this.legend.form_range).find("input[name=m1]")];
   };
 
   return BoxView;

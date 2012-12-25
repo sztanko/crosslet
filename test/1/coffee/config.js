@@ -23,36 +23,48 @@ config = {
   },
   dimensions: {
     imd: {
-      field: "imd",
       title: "Index of Multiple Deprivation",
-      load_url: "data/imd.tsv",
-      inputformat: function(data) {
-        return (function(f) {
-          return Math.round(f * 100) / 100;
-        });
+      data: {
+        dataSet: "data/imd.tsv",
+        field: "imd"
       },
-      axisformat: function(data) {
-        return Math.round;
+      format: {
+        short: function(data) {
+          return (function(f) {
+            return Math.round(f * 100) / 100;
+          });
+        },
+        axis: function(data) {
+          return Math.round;
+        }
       }
     },
     crime: {
-      field: "crime",
       title: "Crime figures",
-      load_url: "data/imd.tsv",
-      inputformat: function(data) {
-        return (function(f) {
-          return Math.round(f * 100) / 100;
-        });
+      data: {
+        dataSet: "data/imd.tsv",
+        field: "crime"
+      },
+      format: {
+        short: function(data) {
+          return (function(f) {
+            return Math.round(f * 100) / 100;
+          });
+        }
       }
     },
     income: {
-      field: "income",
       title: "Income Deprivation",
-      load_url: "data/imd.tsv",
-      inputformat: function(data) {
-        return (function(f) {
-          return Math.round(f * 100) / 100;
-        });
+      data: {
+        dataSet: "data/imd.tsv",
+        field: "income"
+      },
+      format: {
+        short: function(data) {
+          return (function(f) {
+            return Math.round(f * 100) / 100;
+          });
+        }
       }
     },
     price: {
@@ -60,36 +72,55 @@ config = {
         bedrooms: 1,
         type: "sale"
       },
-      load_url: "data/prices.tsv",
-      field: function(d) {
-        return d.p.type + "_" + d.p.bedrooms;
-      },
-      renderForm: function(data, container) {
-        return $(container).html($("#templates .price").html());
-      },
-      format: function(data) {
-        if (data.p.type === 'sale') {
-          return function(v) {
-            return "£" + d3.format(",.0f")(v / 1000) + "k";
-          };
-        } else {
-          return function(v) {
-            return "£" + d3.format(",.0f")(v) + " per week";
-          };
+      data: {
+        dataSet: "data/prices.tsv",
+        field: function(d) {
+          return d.p.type + "_" + d.p.bedrooms;
+        },
+        preformat: function(d) {
+          if (d.p.type === 'rent') {
+            return function(dd) {
+              return +dd * 12 / 52;
+            };
+          } else {
+            return function(dd) {
+              return +dd;
+            };
+          }
         }
       },
-      inputformat: function(data) {
-        return Math.round;
+      render: {
+        form: function(data, container) {
+          $(container).html($("#templates .price").html());
+          crosslet.changeSelect($(container).find("[name=type]"), data.p.type);
+          return crosslet.changeSelect($(container).find("[name=bedrooms]"), data.p.bedrooms);
+        }
       },
-      axisformat: function(data) {
-        if (data.p.type === 'sale') {
-          return function(v) {
-            return "£" + d3.format(",.0f")(v / 1000) + "k";
-          };
-        } else {
-          return function(v) {
-            return "£" + d3.format(",.0f")(v);
-          };
+      format: {
+        short: function(data) {
+          if (data.p.type === 'sale') {
+            return function(v) {
+              return "£" + d3.format(",.0f")(v / 1000) + "k";
+            };
+          } else {
+            return function(v) {
+              return "£" + d3.format(",.0f")(v) + " per week";
+            };
+          }
+        },
+        input: function(data) {
+          return Math.round;
+        },
+        axis: function(data) {
+          if (data.p.type === 'sale') {
+            return function(v) {
+              return "£" + d3.format(",.0f")(v / 1000) + "k";
+            };
+          } else {
+            return function(v) {
+              return "£" + d3.format(",.0f")(v);
+            };
+          }
         }
       }
     }
