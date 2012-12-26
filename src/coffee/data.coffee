@@ -15,17 +15,19 @@ class crosslet.DataStore
 		#@projection=initData.projection
 		@l=window.dataloader
 		
-		
+	addData: (data,callback) ->
+		#debugger
+		for d in data
+			@data[d[@idField]]={} if not @data[d[@idField]]
+			for k,v of d
+				@data[d[@idField]][k]=+v if not _.isNaN(+v) 
+		@isDataLoaded=true
+		callback(data) if callback
+
 	loadData: (url, callback, method) ->
 		method= d3.tsv if not method
 		@l.load url, method, (data) =>
-			#debugger
-			for d in data
-				@data[d[@idField]]={} if not @data[d[@idField]]
-				for k,v of d
-					@data[d[@idField]][k]=+v if not _.isNaN(+v) 
-			@isDataLoaded=true
-			callback(data) if callback
+			@addData(data,callback)
 		return @
 
 	get_bounds_topo: (c) ->

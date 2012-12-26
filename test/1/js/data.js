@@ -22,21 +22,25 @@ crosslet.DataStore = (function() {
     this.l = window.dataloader;
   }
 
+  DataStore.prototype.addData = function(data, callback) {
+    var d, k, v, _i, _len;
+    for (_i = 0, _len = data.length; _i < _len; _i++) {
+      d = data[_i];
+      if (!this.data[d[this.idField]]) this.data[d[this.idField]] = {};
+      for (k in d) {
+        v = d[k];
+        if (!_.isNaN(+v)) this.data[d[this.idField]][k] = +v;
+      }
+    }
+    this.isDataLoaded = true;
+    if (callback) return callback(data);
+  };
+
   DataStore.prototype.loadData = function(url, callback, method) {
     var _this = this;
     if (!method) method = d3.tsv;
     this.l.load(url, method, function(data) {
-      var d, k, v, _i, _len;
-      for (_i = 0, _len = data.length; _i < _len; _i++) {
-        d = data[_i];
-        if (!_this.data[d[_this.idField]]) _this.data[d[_this.idField]] = {};
-        for (k in d) {
-          v = d[k];
-          if (!_.isNaN(+v)) _this.data[d[_this.idField]][k] = +v;
-        }
-      }
-      _this.isDataLoaded = true;
-      if (callback) return callback(data);
+      return _this.addData(data, callback);
     });
     return this;
   };

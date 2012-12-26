@@ -23,6 +23,7 @@ crosslet.notimplemented = function() {
 
 crosslet.changeSelect = function(select, val) {
   return $(select).find("option").filter(function() {
+    console.log($(this).val());
     return $(this).val() === val;
   }).attr('selected', true);
 };
@@ -104,7 +105,7 @@ crosslet.defaultDimensionConfig = {
       return el.html(html);
     },
     form: function(d, el) {
-      return el.html("");
+      return d.render.legend(d, el);
     },
     rangeForm: function(d, el) {
       var html, size;
@@ -121,7 +122,6 @@ crosslet.defaultDimensionConfig = {
     $(el).find("input, select").each(function(index, el) {
       return out[$(el).attr("name")] = $(el).val();
     });
-    console.log(out);
     return out;
   }
 };

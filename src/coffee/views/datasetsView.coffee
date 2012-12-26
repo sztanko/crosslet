@@ -84,11 +84,13 @@ class crosslet.PanelView extends Backbone.View
 		groups={}
 		@charts={}
 		#renderAll= (method)=> _.each(_.values(@charts),(c)-> c.call(method)); return true
-		
+		brushevent= (box,ctx) -> 
+			() -> box.event_click(); ctx.renderCubes()
 		for bName, box of @boxes
-			console.log("lala chart"+bName)
+			`var chart, js_box,js_bName`
+			js_box=box
+			js_bName=bName
 			d=@cube.dimension((dd) -> dd[bName])
-			console.log("End of dumen")
 			dg=d.group(getRounder(box.config.data.interval[0],box.config.data.interval[1],@width-20))
 			
 			box.graph.empty()
@@ -100,23 +102,23 @@ class crosslet.PanelView extends Backbone.View
 				.tickSize(box.config.data.tickSize)
 				.tickFormat(box.config.format.axis(box.config))
 				.fill(box.config.data.colorscale)
-			chart.on("brush",@renderCubes)
+			console.log(js_bName)
+			chart.on("brush",brushevent(box,@))
 			chart.on("brushend",@renderCubes)
-			@charts[bName]=chart
 			box.chart=chart
 			
+			@charts[bName]=chart
 			#debugger;
 		@renderCubes()
 		return @
 	
 	renderCubes: () =>
-		console.log("renderCubes")
+		#console.log("renderCubes")
 		for bName, box of @boxes
-				console.log("before xf")
 				box.chart(box.graph)
 				$(box.el).on("mousedown",box.event_click)
 				box.setFilter(box.chart.filter(), false)
-				console.log("after xf")
+				
 		abox=@boxes[@active]
 		abox.setFilter(abox.chart.filter(),false)
 		@renderMap()
@@ -128,8 +130,9 @@ class crosslet.BoxView extends Backbone.View
 		@config=crosslet.createConfig(crosslet.defaultDimensionConfig,config)
 		@config.id=name
 		@config.data.field_func = if not _.isFunction(@config.data.field) then ((d) -> d.data.field) else @config.data.field
-		$(@el)[0].onmousedown = $(@el)[0].ondblclick = L.DomEvent.stopPropagation;
 		$(@el).on("mousedown",@event_click)
+		$(@el).on("tap",@event_click)
+		$(@el)[0].onmousedown = $(@el)[0].ondblclick = L.DomEvent.stopPropagation;
 		@legend={}
 		@legend.all=$("<div class='legend'></div>")
 		@legend.text=$("<div class='legendText'></div>")
@@ -153,20 +156,20 @@ class crosslet.BoxView extends Backbone.View
 		#debugger;
 	loadData: ()->
 		if _.isString(@config.data.dataSet)
-			console.log("Thats an url")
+			#console.log("Thats an url")
 			@parent.ds.loadData(@config.data.dataSet, @dataLoaded,@config.data.method)
 		else 
 			if _.isFunction(@config.data.dataSet)
-				console.log("Thats a function")
+				#console.log("Thats a function")
 				@parent.ds.loadData(@config.data.dataSet(@config), @dataLoaded,@config.data.method)
 			else
-				console.log("Thats an array") 
-				@dataLoaded @config.data.dataSet
+				#console.log("Thats an array") 
+				@parent.ds.addData @config.data.dataSet, @dataLoaded
 
 	dataLoaded: () =>
 		@data={}
 		f=@config.data.field_func(@config)
-		console.log("Field is "+f)
+		#console.log("Field is "+f)
 		preformatter=@config.data.preformat(@config)
 		for id, val of @parent.ds.data
 			@data[id]=preformatter(val[f]) if val[f]

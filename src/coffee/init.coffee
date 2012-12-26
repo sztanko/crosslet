@@ -11,7 +11,7 @@ crosslet.notimplemented = () -> throw("This function is not set. Please check yo
 crosslet.changeSelect= (select, val) ->
 	$(select).find("option").filter(() ->
 		console.log($(this).val())
-    	return $(this).val() == val
+		return $(this).val() == val
 		).attr('selected', true)
 crosslet.defaultConfig=
 		map:
@@ -59,8 +59,7 @@ crosslet.defaultDimensionConfig=
 		range: (d,el) ->
 			html= "<p><span class='m0'>"+d.format.short(d)(d.filter[0])+"</span> &ndash; <span class='m1'>"+d.format.short(d)(d.filter[1])+"</span></p>"
 			el.html(html)
-		form: (d,el) ->
-			el.html("")
+		form: (d,el) ->	d.render.legend(d,el)
 		rangeForm: (d,el) ->
 			size=_.max(_.map(d.data.interval,(dd) ->("_"+d.format.input(d)(dd)).length-1))
 			html= "Range: <input type='text' name='m0' size='"+size+"' value='"+d.format.input(d)(d.filter[0])+"'> &ndash; <input type='text' name='m1' size='3' value='"+d.format.input(d)(d.filter[1])+"'>"

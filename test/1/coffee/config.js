@@ -94,6 +94,11 @@ config = {
           $(container).html($("#templates .price").html());
           crosslet.changeSelect($(container).find("[name=type]"), data.p.type);
           return crosslet.changeSelect($(container).find("[name=bedrooms]"), data.p.bedrooms);
+        },
+        legend: function(data, c) {
+          var type;
+          type = data.p.type === 'rent' ? "Weekly rental" : "Sale";
+          return $(c).html("<h2>" + type + " price of " + data.p.bedrooms + " bed flat</h2>");
         }
       },
       format: {
@@ -104,7 +109,7 @@ config = {
             };
           } else {
             return function(v) {
-              return "£" + d3.format(",.0f")(v) + " per week";
+              return "£" + d3.format(",.0f")(v) + " pw";
             };
           }
         },

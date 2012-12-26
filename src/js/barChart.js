@@ -19,7 +19,7 @@ barChart=function() {
         fill;
 
     function chart(div) {
-      console.log(div)
+      
      //debugger;
       var width = x.range()[1],
           height = y.range()[0];

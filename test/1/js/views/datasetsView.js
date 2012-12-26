@@ -109,7 +109,7 @@ crosslet.PanelView = (function(_super) {
   };
 
   PanelView.prototype.createCube = function() {
-    var bName, box, chart, d, dg, getRounder, groups, int, key, keys, row, t1, t15, t2, _i, _len, _ref, _ref2;
+    var bName, box, brushevent, chart, d, dg, getRounder, groups, int, js_bName, js_box, key, keys, row, t1, t15, t2, _i, _len, _ref, _ref2;
     this.rows = [];
     t1 = new Date().getTime();
     keys = _.map(_.values(this.boxes), function(b) {
@@ -138,21 +138,29 @@ crosslet.PanelView = (function(_super) {
     };
     groups = {};
     this.charts = {};
+    brushevent = function(box, ctx) {
+      return function() {
+        box.event_click();
+        return ctx.renderCubes();
+      };
+    };
     _ref2 = this.boxes;
     for (bName in _ref2) {
       box = _ref2[bName];
-      console.log("lala chart" + bName);
+      var chart, js_box,js_bName;
+      js_box = box;
+      js_bName = bName;
       d = this.cube.dimension(function(dd) {
         return dd[bName];
       });
-      console.log("End of dumen");
       dg = d.group(getRounder(box.config.data.interval[0], box.config.data.interval[1], this.width - 20));
       box.graph.empty();
       chart = barChart().dimension(d).name_id(bName).group(dg).x(d3.scale.linear().domain(box.config.data.interval).rangeRound([0, this.width - 20])).tickSize(box.config.data.tickSize).tickFormat(box.config.format.axis(box.config)).fill(box.config.data.colorscale);
-      chart.on("brush", this.renderCubes);
+      console.log(js_bName);
+      chart.on("brush", brushevent(box, this));
       chart.on("brushend", this.renderCubes);
-      this.charts[bName] = chart;
       box.chart = chart;
+      this.charts[bName] = chart;
     }
     this.renderCubes();
     return this;
@@ -160,15 +168,12 @@ crosslet.PanelView = (function(_super) {
 
   PanelView.prototype.renderCubes = function() {
     var abox, bName, box, _ref;
-    console.log("renderCubes");
     _ref = this.boxes;
     for (bName in _ref) {
       box = _ref[bName];
-      console.log("before xf");
       box.chart(box.graph);
       $(box.el).on("mousedown", box.event_click);
       box.setFilter(box.chart.filter(), false);
-      console.log("after xf");
     }
     abox = this.boxes[this.active];
     abox.setFilter(abox.chart.filter(), false);
@@ -199,8 +204,9 @@ crosslet.BoxView = (function(_super) {
     this.config.data.field_func = !_.isFunction(this.config.data.field) ? (function(d) {
       return d.data.field;
     }) : this.config.data.field;
-    $(this.el)[0].onmousedown = $(this.el)[0].ondblclick = L.DomEvent.stopPropagation;
     $(this.el).on("mousedown", this.event_click);
+    $(this.el).on("tap", this.event_click);
+    $(this.el)[0].onmousedown = $(this.el)[0].ondblclick = L.DomEvent.stopPropagation;
     this.legend = {};
     this.legend.all = $("<div class='legend'></div>");
     this.legend.text = $("<div class='legendText'></div>");
@@ -224,15 +230,12 @@ crosslet.BoxView = (function(_super) {
 
   BoxView.prototype.loadData = function() {
     if (_.isString(this.config.data.dataSet)) {
-      console.log("Thats an url");
       return this.parent.ds.loadData(this.config.data.dataSet, this.dataLoaded, this.config.data.method);
     } else {
       if (_.isFunction(this.config.data.dataSet)) {
-        console.log("Thats a function");
         return this.parent.ds.loadData(this.config.data.dataSet(this.config), this.dataLoaded, this.config.data.method);
       } else {
-        console.log("Thats an array");
-        return this.dataLoaded(this.config.data.dataSet);
+        return this.parent.ds.addData(this.config.data.dataSet, this.dataLoaded);
       }
     }
   };
@@ -241,7 +244,6 @@ crosslet.BoxView = (function(_super) {
     var f, id, preformatter, val, _ref;
     this.data = {};
     f = this.config.data.field_func(this.config);
-    console.log("Field is " + f);
     preformatter = this.config.data.preformat(this.config);
     _ref = this.parent.ds.data;
     for (id in _ref) {

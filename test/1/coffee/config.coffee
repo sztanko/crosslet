@@ -53,13 +53,15 @@ config=
 					$(container).html($("#templates .price").html())
 					crosslet.changeSelect($(container).find("[name=type]"),data.p.type)
 					crosslet.changeSelect($(container).find("[name=bedrooms]"),data.p.bedrooms)
-
+				legend: (data,c)->
+					type=if data.p.type=='rent' then "Weekly rental" else "Sale"
+					$(c).html("<h2>"+type+" price of "+data.p.bedrooms+" bed flat</h2>")
 			format: 
 				short: (data) ->
 					if data.p.type=='sale'
 						return (v) -> "£"+d3.format(",.0f")(v/1000)+"k"
 					else
-						return (v) -> "£"+d3.format(",.0f")(v)+" per week"
+						return (v) -> "£"+d3.format(",.0f")(v)+" pw"
 				input: (data) -> return Math.round
 				axis: (data) ->
 					if data.p.type=='sale'
