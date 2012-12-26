@@ -23,7 +23,6 @@ crosslet.notimplemented = function() {
 
 crosslet.changeSelect = function(select, val) {
   return $(select).find("option").filter(function() {
-    console.log($(this).val());
     return $(this).val() === val;
   }).attr('selected', true);
 };
@@ -31,7 +30,7 @@ crosslet.changeSelect = function(select, val) {
 crosslet.defaultConfig = {
   map: {
     leaflet: {
-      key: "fe623ce312234f8f9333bbee72d4a176",
+      key: "--your key--",
       styleId: 64657,
       attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>'
     },
@@ -42,7 +41,8 @@ crosslet.defaultConfig = {
     geo: {
       url: "please specify correct location of your geojson",
       name_field: "name",
-      id_field: "code"
+      id_field: "code",
+      topo_object: "please specify correct object name"
     }
   }
 };
@@ -62,6 +62,7 @@ crosslet.defaultConfig = {
 
 crosslet.defaultDimensionConfig = {
   p: {},
+  filter: null,
   data: {
     interval: null,
     filter: null,

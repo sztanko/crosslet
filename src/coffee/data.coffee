@@ -39,25 +39,27 @@ class crosslet.DataStore
 			o.push(a)
 		return o
 
-	loadGeo: (url, geoIdField, callback) =>
-		@l.load @geoURL, d3.json, (t) =>
-				if t.arcs
-					@geometries=topojson.object(t,t.objects.lsoa_full).geometries
-					#console.log(@geometries)
-					@bounds=@get_bounds_topo(@geometries)
-				else
-					@geometries=t.features
-					@bounds=d3.geo.bounds(t)
-				#console.log(@bounds)
-				for f in @geometries
-					#console.log(f)
-					if f.properties
-						@data[f.properties[@geoIdField]]=f.properties
-						@data[f.properties[@geoIdField]].bbox=d3.geo.bounds(f)
-				#@path = d3.geo.path().projection(@projection)
-				@isGeoLoaded=true
-				callback(@) if callback
-				return @
+	loadGeo: (url, geoIdField, callback, topo_objectName) =>
+		@l.load url, d3.json, (t) =>
+			if t.arcs
+				t=topojson.object(t,t.objects[topo_objectName])
+				@geometries=t.geometries
+				#console.log(@geometries)
+				#@bounds=@get_bounds_topo(@geometries)
+				#debugger;
+			else
+				@geometries=t.features
+			@bounds=d3.geo.bounds(t)
+			#console.log(@bounds)
+			for f in @geometries
+				#console.log(f)
+				if f.properties
+					@data[f.properties[@geoIdField]]=f.properties
+					@data[f.properties[@geoIdField]].bbox=d3.geo.bounds(f)
+			#@path = d3.geo.path().projection(@projection)
+			@isGeoLoaded=true
+			callback(@) if callback
+			return @
 
 
 #Class for loading/caching data

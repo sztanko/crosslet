@@ -40,6 +40,7 @@ config = {
       }
     },
     crime: {
+      filter: [-1, 0],
       title: "Crime figures",
       data: {
         dataSet: "data/imd.tsv",
@@ -70,7 +71,7 @@ config = {
     price: {
       p: {
         bedrooms: 1,
-        type: "sale"
+        type: "rent"
       },
       data: {
         dataSet: "data/prices.tsv",
@@ -133,7 +134,7 @@ config = {
   defaults: {
     colorscale: d3.scale.linear().domain([1, 12, 20]).range(["green", "yellow", "red"]).interpolate(d3.cie.interpolateLab),
     opacity: 0.7,
-    order: ["imd", "crime", "income", "price"],
+    order: ["imd"],
     active: "imd"
   }
 };

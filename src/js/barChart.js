@@ -265,4 +265,5 @@ barChart=function() {
     };
 
     return d3.rebind(chart, brush, "on");
-  }
+  };
+  

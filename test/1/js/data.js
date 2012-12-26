@@ -66,17 +66,17 @@ crosslet.DataStore = (function() {
     return o;
   };
 
-  DataStore.prototype.loadGeo = function(url, geoIdField, callback) {
+  DataStore.prototype.loadGeo = function(url, geoIdField, callback, topo_objectName) {
     var _this = this;
-    return this.l.load(this.geoURL, d3.json, function(t) {
+    return this.l.load(url, d3.json, function(t) {
       var f, _i, _len, _ref;
       if (t.arcs) {
-        _this.geometries = topojson.object(t, t.objects.lsoa_full).geometries;
-        _this.bounds = _this.get_bounds_topo(_this.geometries);
+        t = topojson.object(t, t.objects[topo_objectName]);
+        _this.geometries = t.geometries;
       } else {
         _this.geometries = t.features;
-        _this.bounds = d3.geo.bounds(t);
       }
+      _this.bounds = d3.geo.bounds(t);
       _ref = _this.geometries;
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         f = _ref[_i];

@@ -57,7 +57,7 @@ crosslet.MapView = (function(_super) {
       _this.hoverElementRect = _this.hoverElement.append("svg:rect").attr("x", 0).attr("y", 0).attr("width", 10).attr("height", 30).attr("rx", 5).attr("ry", 5);
       _this.hoverElementText = _this.hoverElement.append("text").attr("x", 0).attr("y", 0);
       return _this.hoverElementTextBB = _this.hoverElementText.node().getBBox();
-    });
+    }, this.config.map.geo.topo_object);
   };
 
   MapView.prototype.project = function(x) {

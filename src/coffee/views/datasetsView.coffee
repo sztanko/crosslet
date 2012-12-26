@@ -7,14 +7,14 @@ class crosslet.PanelView extends Backbone.View
 		@boxes={}
 		@render()
 		@width=200
-		@active= if config.defaults.active then config.defaults.active else config.defaults.order[0]
+		@active= if @config.defaults.active then @config.defaults.active else @config.defaults.order[0]
 		@numloads=@config.defaults.order.length
 		for o in @config.defaults.order
 			#console.log(o)
 			e=$("<div class='box'></div>")
 			@boxes[o]=new crosslet.BoxView(e,@config.dimensions[o],@,o)
-			@boxes[@active].setActive(true)
 			$(@el).append(e)
+		@boxes[@active].setActive(true)
 		@renderMap=_.debounce(@_renderMap,200)
 		return @boxes
 
@@ -102,7 +102,6 @@ class crosslet.PanelView extends Backbone.View
 				.tickSize(box.config.data.tickSize)
 				.tickFormat(box.config.format.axis(box.config))
 				.fill(box.config.data.colorscale)
-			console.log(js_bName)
 			chart.on("brush",brushevent(box,@))
 			chart.on("brushend",@renderCubes)
 			box.chart=chart
@@ -110,6 +109,8 @@ class crosslet.PanelView extends Backbone.View
 			@charts[bName]=chart
 			#debugger;
 		@renderCubes()
+		for o in @config.defaults.order
+			@boxes[o].setFilter(@config.dimensions[o].filter,true) if @config.dimensions[o].filter
 		return @
 	
 	renderCubes: () =>

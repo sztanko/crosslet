@@ -26,6 +26,7 @@ config=
 				axis: (data) -> Math.round
 			#render: (data,container) -> $(container).html($("#templates .imd").html())
 		crime:
+			filter: [-1,0]
 			title: "Crime figures"
 			data:
 				dataSet: "data/imd.tsv"
@@ -43,7 +44,7 @@ config=
 		price:
 			p:
 				bedrooms: 1
-				type: "sale"
+				type: "rent"
 			data:
 				dataSet: "data/prices.tsv"
 				field: (d) -> d.p.type+"_"+d.p.bedrooms
@@ -71,5 +72,5 @@ config=
 	defaults:
 		colorscale: d3.scale.linear().domain([1,12,20]).range(["green","yellow", "red"]).interpolate(d3.cie.interpolateLab);
 		opacity: 0.7
-		order: ["imd","crime","income","price"]
+		order: ["imd"]#,"crime","income","price"]
 		active: "imd"

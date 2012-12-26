@@ -26,7 +26,7 @@ class crosslet.MapView extends Backbone.View
 		@panel=new crosslet.PanelView(@control,@config,@)
 		@renderMap=@_renderMap #_.debounce(@_renderMap,200)
 		#console.log(@panel)
-
+		#debugger;
 		@ds.loadGeo(@geoURL, @config.map.geo.id_field, (ds) =>
 			@bounds = @ds.bounds
 			@path = d3.geo.path().projection(@project)
@@ -53,7 +53,7 @@ class crosslet.MapView extends Backbone.View
 			.attr("ry",5)
 			@hoverElementText=@hoverElement.append("text").attr("x",0).attr("y",0)
 			@hoverElementTextBB=@hoverElementText.node().getBBox()
-		)
+		, @config.map.geo.topo_object)
 	
 
 

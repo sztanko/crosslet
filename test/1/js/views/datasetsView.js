@@ -23,16 +23,16 @@ crosslet.PanelView = (function(_super) {
     this.boxes = {};
     this.render();
     this.width = 200;
-    this.active = config.defaults.active ? config.defaults.active : config.defaults.order[0];
+    this.active = this.config.defaults.active ? this.config.defaults.active : this.config.defaults.order[0];
     this.numloads = this.config.defaults.order.length;
     _ref = this.config.defaults.order;
     for (_i = 0, _len = _ref.length; _i < _len; _i++) {
       o = _ref[_i];
       e = $("<div class='box'></div>");
       this.boxes[o] = new crosslet.BoxView(e, this.config.dimensions[o], this, o);
-      this.boxes[this.active].setActive(true);
       $(this.el).append(e);
     }
+    this.boxes[this.active].setActive(true);
     this.renderMap = _.debounce(this._renderMap, 200);
     return this.boxes;
   };
@@ -109,7 +109,7 @@ crosslet.PanelView = (function(_super) {
   };
 
   PanelView.prototype.createCube = function() {
-    var bName, box, brushevent, chart, d, dg, getRounder, groups, int, js_bName, js_box, key, keys, row, t1, t15, t2, _i, _len, _ref, _ref2;
+    var bName, box, brushevent, chart, d, dg, getRounder, groups, int, js_bName, js_box, key, keys, o, row, t1, t15, t2, _i, _j, _len, _len2, _ref, _ref2, _ref3;
     this.rows = [];
     t1 = new Date().getTime();
     keys = _.map(_.values(this.boxes), function(b) {
@@ -156,13 +156,19 @@ crosslet.PanelView = (function(_super) {
       dg = d.group(getRounder(box.config.data.interval[0], box.config.data.interval[1], this.width - 20));
       box.graph.empty();
       chart = barChart().dimension(d).name_id(bName).group(dg).x(d3.scale.linear().domain(box.config.data.interval).rangeRound([0, this.width - 20])).tickSize(box.config.data.tickSize).tickFormat(box.config.format.axis(box.config)).fill(box.config.data.colorscale);
-      console.log(js_bName);
       chart.on("brush", brushevent(box, this));
       chart.on("brushend", this.renderCubes);
       box.chart = chart;
       this.charts[bName] = chart;
     }
     this.renderCubes();
+    _ref3 = this.config.defaults.order;
+    for (_j = 0, _len2 = _ref3.length; _j < _len2; _j++) {
+      o = _ref3[_j];
+      if (this.config.dimensions[o].filter) {
+        this.boxes[o].setFilter(this.config.dimensions[o].filter, true);
+      }
+    }
     return this;
   };
 
