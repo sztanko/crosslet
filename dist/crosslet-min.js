@@ -879,7 +879,11 @@ crosslet.DataStore = (function() {
       for (_i = 0, _len = _ref.length; _i < _len; _i++) {
         f = _ref[_i];
         if (f.properties) {
-          _this.data[f.properties[_this.geoIdField]] = f.properties;
+          if (!_this.data[f.properties[_this.geoIdField]]) {
+            _this.data[f.properties[_this.geoIdField]] = f.properties;
+          } else {
+            _this.data[f.properties[_this.geoIdField]] = jQuery.extend(true, _this.data[f.properties[_this.geoIdField]], f.properties);
+          }
           _this.data[f.properties[_this.geoIdField]].bbox = d3.geo.bounds(f);
         }
       }
@@ -1199,7 +1203,7 @@ crosslet.BoxView = (function(_super) {
     _ref = this.parent.ds.data;
     for (id in _ref) {
       val = _ref[id];
-      if (val[f]) this.data[id] = preformatter(val[f]);
+      if (_.isNumber(val[f])) this.data[id] = preformatter(val[f]);
     }
     if (!this.config.data.interval) {
       this.config.data.interval = [_.min(_.values(this.data)), _.max(_.values(this.data))];
@@ -1407,7 +1411,7 @@ crosslet.MapView = (function(_super) {
       var id;
       id = d.properties[_this.config.map.geo.id_field];
       d.properties.value = data[id];
-      if (data[id]) {
+      if (_.isNumber(data[id])) {
         return "fill: " + formatter(d.properties.value);
       } else {
         return "display:none";

@@ -173,7 +173,7 @@ class crosslet.BoxView extends Backbone.View
 		#console.log("Field is "+f)
 		preformatter=@config.data.preformat(@config)
 		for id, val of @parent.ds.data
-			@data[id]=preformatter(val[f]) if val[f]
+			@data[id]=preformatter(val[f]) if _.isNumber(val[f])
 		@config.data.interval=[_.min(_.values @data), _.max(_.values @data)] if not @config.data.interval
 		@config.filter=[_.min(_.values @data), _.max(_.values @data)] if not @config.filter
 		#console.log("Interval is")

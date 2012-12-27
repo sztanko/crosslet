@@ -20,7 +20,7 @@ class crosslet.DataStore
 		for d in data
 			@data[d[@idField]]={} if not @data[d[@idField]]
 			for k,v of d
-				@data[d[@idField]][k]=+v if not _.isNaN(+v) 
+				@data[d[@idField]][k]=+v if not _.isNaN(+v)
 		@isDataLoaded=true
 		callback(data) if callback
 
@@ -54,7 +54,10 @@ class crosslet.DataStore
 			for f in @geometries
 				#console.log(f)
 				if f.properties
-					@data[f.properties[@geoIdField]]=f.properties
+					if not @data[f.properties[@geoIdField]]
+						@data[f.properties[@geoIdField]]=f.properties
+					else 
+						@data[f.properties[@geoIdField]]=jQuery.extend(true, @data[f.properties[@geoIdField]], f.properties)
 					@data[f.properties[@geoIdField]].bbox=d3.geo.bounds(f)
 			#@path = d3.geo.path().projection(@projection)
 			@isGeoLoaded=true

@@ -108,7 +108,7 @@ class crosslet.MapView extends Backbone.View
 		@feature.attr("style",(d) =>
 			id=d.properties[@config.map.geo.id_field]
 			d.properties.value=data[id]
-			if data[id]
+			if _.isNumber(data[id])
 				"fill: "+formatter(d.properties.value)
 			else
 				"display:none"
