@@ -80,7 +80,7 @@ class crosslet.PanelView extends Backbone.View
 		#console.log("Intersection took "+d3.format(",")(t2-t1)+" ms")
 		@cube = crossfilter(@rows)
 		
-		getRounder=(m1,m2,w) -> t=10*(m2-m1)/(w); return (d) ->t*Math.floor(+d/t)
+		getRounder=(m1,m2,w) -> t=5*(m2-m1)/(w); return (d) ->t*Math.floor(+d/t)
 		groups={}
 		@charts={}
 		#renderAll= (method)=> _.each(_.values(@charts),(c)-> c.call(method)); return true
@@ -108,7 +108,7 @@ class crosslet.PanelView extends Backbone.View
 			
 			@charts[bName]=chart
 			#debugger;
-		@renderCubes()
+		@renderCubes() if @parent.ds.isGeoLoaded
 		for o in @config.defaults.order
 			@boxes[o].setFilter(@config.dimensions[o].filter,true) if @config.dimensions[o].filter
 		return @

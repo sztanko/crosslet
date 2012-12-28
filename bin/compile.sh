@@ -1,5 +1,5 @@
-#uglify="uglifyjs"
-uglify="cat"
+uglify="uglifyjs"
+#uglify="cat"
 
 rm -rf ../dist/crosslet-min.js
 for f in `find ../lib/ -type f -name "*.js" | sort`

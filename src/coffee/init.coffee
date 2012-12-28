@@ -6,7 +6,7 @@ crosslet.createConfig= (defaultConfig,config) ->
 	c=jQuery.extend(true,jQuery.extend(true, {}, defaultConfig),config)
 
 crosslet.id= (d) -> d
-crosslet.idf= (d) -> id
+crosslet.idf= (d) -> crosslet.id
 crosslet.notimplemented = () -> throw("This function is not set. Please check your config."); 
 crosslet.changeSelect= (select, val) ->
 	$(select).find("option").filter(() ->

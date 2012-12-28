@@ -27,6 +27,11 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.2/backbone-min.js"></script>
 <script src="crosslet-min.js"></script>
 <script type="text/javascript">
+var f = function() { return function(d){
+  return d3.format(",.2f")(d)+"%"
+};};
+
+var inp = function() {  return d3.format(",.2f") };
 
 var config = {
   map: {
@@ -57,27 +62,34 @@ var config = {
         dataSet: "data/us_elect_county.csv",
         field: "total"
       },
+      
     },
     obama: {
       title: "Obama",
       data: {
         dataSet: "data/us_elect_county.csv",
-        field: "obama_p"
+        field: "obama_p",
+        colorscale: d3.scale.linear().domain([1,20]).range(["#AAAAFF","blue"])//.interpolate(d3.cie.interpolateLab)
       },
+      format: { short: f,long: f, input: inp},
     },  
     romney: {
       title: "Romney",
       data: {
         dataSet: "data/us_elect_county.csv",
-        field: "romney_p"
+        field: "romney_p",
+        colorscale: d3.scale.linear().domain([1,20]).range(["#FFAAAA","red"])//.interpolate(d3.cie.interpolateLab)
       },
+      format: { short: f,long: f,input: inp},
     },
     other: {
       title: "Votes for others",
       data: {
         dataSet: "data/us_elect_county.csv",
-        field: "other_p"
+        field: "other_p",
+        colorscale: d3.scale.linear().domain([1,20]).range(["#AAFFAA","green"]).interpolate(d3.cie.interpolateLab)
       },
+      format: { short: f,long: f,input: inp},
     },
     },
   

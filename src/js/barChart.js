@@ -121,7 +121,7 @@ barChart=function() {
         while (++i < n) {
           d = groups[i];
           //console.log(d.value)
-          path.push("M", x(d.key), ",", height, "V", y(d.value), "h9V", height);
+          path.push("M", x(d.key), ",", height, "V", y(d.value), "h4.5V", height);
         }
         return path.join("");
       }

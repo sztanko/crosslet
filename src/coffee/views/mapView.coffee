@@ -27,6 +27,7 @@ class crosslet.MapView extends Backbone.View
 		@renderMap=@_renderMap #_.debounce(@_renderMap,200)
 		#console.log(@panel)
 		#debugger;
+		#console.log
 		@ds.loadGeo(@geoURL, @config.map.geo.id_field, (ds) =>
 			@bounds = @ds.bounds
 			@path = d3.geo.path().projection(@project)
@@ -52,7 +53,9 @@ class crosslet.MapView extends Backbone.View
 			.attr("rx",5)
 			.attr("ry",5)
 			@hoverElementText=@hoverElement.append("text").attr("x",0).attr("y",0)
-			@hoverElementTextBB=@hoverElementText.node().getBBox()
+			#@hoverElementTextBB=@hoverElementText.node().getBBox() - firefox will hate this, see https://bugzilla.mozilla.org/show_bug.cgi?id=612118
+			@hoverElementTextBB={width: 0, height:0, x:0, y:0}
+			@panel.createCube() if @panel.numloads<=0
 		, @config.map.geo.topo_object)
 	
 
@@ -78,7 +81,17 @@ class crosslet.MapView extends Backbone.View
 		#	@path_done=true
 		return true
 	moveMove: () =>
+		br=jQuery.browser
 		pos=d3.mouse(@svg.node())
+		if br.mozilla
+			trp=@svg.node().parentNode.parentNode.parentNode
+			matrix=$(trp).css("transform").split('(')[1].split(')')[0].split(',');
+			#console.log(matrix)
+			dx=+matrix[4]
+			dy=+matrix[5]
+			pos[0]-=dx
+			pos[1]-=dy
+		#console.log(pos)
 		pos[0]+=30
 		pos[1]+=30
 		#console.log()
