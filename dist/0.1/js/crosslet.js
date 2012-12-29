@@ -405,7 +405,8 @@ barChart=function() {
 
     var margin = {top: 5, right: 10, bottom: 20, left: 10},
         x,
-        y = d3.scale.linear().range([20, 0]),
+        //y = d3.scale.log().clamp(true).range([20, 0]),
+        y = d3.scale.pow().exponent(0.01).clamp(true).range([20, 0]),
         id = barChart.id++,
         axis = d3.svg.axis().orient("bottom"),
         brush = d3.svg.brush(),
@@ -425,8 +426,8 @@ barChart=function() {
      //debugger;
       var width = x.range()[1],
           height = y.range()[0];
-
-      y.domain([0, group.top(1)[0].value]);
+      //debugger;
+      y.domain([group.top(1)[0].value/100, group.top(1)[0].value]);
 
       div.each(function() {
         var div = d3.select(this),
@@ -442,7 +443,7 @@ barChart=function() {
               {
               fill_svg=svg.append("defs").append("linearGradient").attr("id","lg-"+id)
                .attr("x1","0%").attr("y1","0%").attr("x2","100%").attr("y2","0%")
-               var rr=d3.scale.linear().domain([0,20]).range(x.range)
+               var rr=x.copy().domain([0,20]).range(x.range)
                for(var i=0;i<20;i++)
                {
                 fill_svg.append("stop").attr("stop-color",fill(i)).attr("offset",i*5+"%").attr("stop-opacity","1")
@@ -522,7 +523,8 @@ barChart=function() {
         //console.log("ha")
         while (++i < n) {
           d = groups[i];
-          //console.log(d.value)
+          //console.log(d.value +" - "+ y(d.value))
+          //debugger;
           path.push("M", x(d.key), ",", height, "V", y(d.value), "h4.5V", height);
         }
         return path.join("");
@@ -747,7 +749,8 @@ crosslet.defaultDimensionConfig = {
       };
     },
     tickSize: 5,
-    colorscale: d3.scale.linear().domain([1, 10, 20]).range(["green", "yellow", "red"]).interpolate(d3.cie.interpolateLab)
+    colorscale: d3.scale.linear().domain([1, 10, 20]).range(["green", "yellow", "red"]).interpolate(d3.cie.interpolateLab),
+    exponent: 1
   },
   format: {
     short: function(d) {
@@ -1058,7 +1061,7 @@ crosslet.PanelView = (function(_super) {
   };
 
   PanelView.prototype.createCube = function() {
-    var bName, box, brushevent, chart, d, dg, getRounder, groups, int, js_bName, js_box, key, keys, o, row, t1, t15, t2, _i, _j, _len, _len2, _ref, _ref2, _ref3;
+    var bName, box, brushevent, chart, d, dg, getRounder, groups, int, js_bName, js_box, key, keys, o, row, scale, t1, t15, t2, _i, _j, _len, _len2, _ref, _ref2, _ref3;
     this.rows = [];
     t1 = new Date().getTime();
     keys = _.map(_.values(this.boxes), function(b) {
@@ -1104,7 +1107,12 @@ crosslet.PanelView = (function(_super) {
       });
       dg = d.group(getRounder(box.config.data.interval[0], box.config.data.interval[1], this.width - 20));
       box.graph.empty();
-      chart = barChart().dimension(d).name_id(bName).group(dg).x(d3.scale.linear().domain(box.config.data.interval).rangeRound([0, this.width - 20])).tickSize(box.config.data.tickSize).tickFormat(box.config.format.axis(box.config)).fill(box.config.data.colorscale);
+      if (box.config.data.exponent === 1) {
+        scale = d3.scale.linear().clamp(true).range([20, 0]);
+      } else {
+        scale = d3.scale.pow().exponent(box.config.data.exponent).clamp(true).range([20, 0]);
+      }
+      chart = barChart().dimension(d).name_id(bName).group(dg).x(d3.scale.linear().domain(box.config.data.interval).rangeRound([0, this.width - 20])).y(scale.copy()).tickSize(box.config.data.tickSize).tickFormat(box.config.format.axis(box.config)).fill(box.config.data.colorscale);
       chart.on("brush", brushevent(box, this));
       chart.on("brushend", this.renderCubes);
       box.chart = chart;

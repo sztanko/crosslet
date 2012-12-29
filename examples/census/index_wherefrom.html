@@ -25,7 +25,7 @@
 <script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/d3/2.10.0/d3.v2.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.2/backbone-min.js"></script>
-<script src="crosslet.js"></script>
+<script src="crosslet-min.js"></script>
 <script type="text/javascript">
 
 var config = {
@@ -51,68 +51,47 @@ var config = {
     id_field: "code"
   },
   dimensions: {
-    christian: {
-      title: "Christian",
+    eng: {
+      title: "People from England, %",
       data: {
-        dataSet: "data/religion.tsv",
-        field: "Christian"
+        dataSet: "data/cob.tsv",
+        field: "eng"
       },
     },  
-    buddhist: {
-      title: "Buddhist",
+    scotland: {
+      title: "People from Scotland, %",
       data: {
-        dataSet: "data/religion.tsv",
-        field: "Buddhist"
-      },
-    },  
-    muslim: {
-      title: "Muslim",
-      data: {
-        dataSet: "data/religion.tsv",
-        field: "Muslim"
-      },
-    },  
-    hindu: {
-      title: "Hindu",
-      data: {
-        dataSet: "data/religion.tsv",
-        field: "Hindu"
-      },
-    },  
-    jewish: {
-      title: "Jewish",
-      data: {
-        dataSet: "data/religion.tsv",
-        field: "Jewish"
+        dataSet: "data/cob.tsv",
+        field: "scotland"
       },
     },
-    sikh: {
-      title: "Sikh",
+    eu_old: {
+      title: "People from old EU countries, %",
       data: {
-        dataSet: "data/religion.tsv",
-        field: "Sikh"
-      },
-    }, 
-    no_religion: {
-      title: "No religion",
-      data: {
-        dataSet: "data/religion.tsv",
-        field: "no religion"
+        dataSet: "data/cob.tsv",
+        field: "eu_old"
       },
     },
-    not_stated: {
-      title: "Not Stated",
+    eu_new: {
+      title: "People from new EU countries, %",
       data: {
-        dataSet: "data/religion.tsv",
-        field: "not stated"
+        dataSet: "data/cob.tsv",
+        field: "eu_new"
       },
-    },       
+    },
+    other: {
+      title: "People from non EU countries, %",
+      data: {
+        dataSet: "data/cob.tsv",
+        field: "other"
+      },
+    },
   },
   defaults: {
     colorscale: d3.scale.linear().domain([1, 10, 20]).range(["green", "yellow", "red"]).interpolate(d3.cie.interpolateLab),
     opacity: 0.7,
-    order: ["christian","muslim","jewish","no_religion"],
-    active: "no_religion"
+    order: ["eng","eu_old","eu_new","other"],
+    active: "eng"
   },
 };
 

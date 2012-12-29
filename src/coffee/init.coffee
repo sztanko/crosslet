@@ -48,6 +48,7 @@ crosslet.defaultDimensionConfig=
 		preformat: (dd) -> ((d) -> +d)
 		tickSize: 5 # how many ticks do you want to see on the scale. 
 		colorscale: d3.scale.linear().domain([1,10,20]).range(["green","yellow", "red"]).interpolate(d3.cie.interpolateLab) # color scale of data
+		exponent: 1
 	format:
 		short: (d) -> d3.format(",.2f") # used to display in ranges
 		long: (d) -> d.format.short(d) # use to display on hover

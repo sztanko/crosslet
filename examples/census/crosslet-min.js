@@ -1,1 +1,1 @@
-../../dist/crosslet-min.js
+../../dist/0.1/js/crosslet-min.js

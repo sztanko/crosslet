@@ -3,7 +3,8 @@ barChart=function() {
 
     var margin = {top: 5, right: 10, bottom: 20, left: 10},
         x,
-        y = d3.scale.linear().range([20, 0]),
+        //y = d3.scale.log().clamp(true).range([20, 0]),
+        y = d3.scale.pow().exponent(0.01).clamp(true).range([20, 0]),
         id = barChart.id++,
         axis = d3.svg.axis().orient("bottom"),
         brush = d3.svg.brush(),
@@ -23,8 +24,8 @@ barChart=function() {
      //debugger;
       var width = x.range()[1],
           height = y.range()[0];
-
-      y.domain([0, group.top(1)[0].value]);
+      //debugger;
+      y.domain([group.top(1)[0].value/100, group.top(1)[0].value]);
 
       div.each(function() {
         var div = d3.select(this),
@@ -40,7 +41,7 @@ barChart=function() {
               {
               fill_svg=svg.append("defs").append("linearGradient").attr("id","lg-"+id)
                .attr("x1","0%").attr("y1","0%").attr("x2","100%").attr("y2","0%")
-               var rr=d3.scale.linear().domain([0,20]).range(x.range)
+               var rr=x.copy().domain([0,20]).range(x.range)
                for(var i=0;i<20;i++)
                {
                 fill_svg.append("stop").attr("stop-color",fill(i)).attr("offset",i*5+"%").attr("stop-opacity","1")
@@ -120,7 +121,8 @@ barChart=function() {
         //console.log("ha")
         while (++i < n) {
           d = groups[i];
-          //console.log(d.value)
+          //console.log(d.value +" - "+ y(d.value))
+          //debugger;
           path.push("M", x(d.key), ",", height, "V", y(d.value), "h4.5V", height);
         }
         return path.join("");

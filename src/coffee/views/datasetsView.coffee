@@ -80,7 +80,12 @@ class crosslet.PanelView extends Backbone.View
 		#console.log("Intersection took "+d3.format(",")(t2-t1)+" ms")
 		@cube = crossfilter(@rows)
 		
-		getRounder=(m1,m2,w) -> t=5*(m2-m1)/(w); return (d) ->t*Math.floor(+d/t)
+		getRounder=(m1,m2,w) -> 
+			#scale=d3.scale.pow().exponent(2).range([m1,m2]).domain([m1,m2])
+			t=5*(m2-m1)/(w);
+
+			#return (d) ->t*Math.floor(+scale(d)/t)
+			return (d) ->t*Math.floor(+d/t)
 		groups={}
 		@charts={}
 		#renderAll= (method)=> _.each(_.values(@charts),(c)-> c.call(method)); return true
@@ -94,11 +99,16 @@ class crosslet.PanelView extends Backbone.View
 			dg=d.group(getRounder(box.config.data.interval[0],box.config.data.interval[1],@width-20))
 			
 			box.graph.empty()
+			if box.config.data.exponent==1
+				scale=d3.scale.linear().clamp(true).range([20, 0])
+			else
+				scale=d3.scale.pow().exponent(box.config.data.exponent).clamp(true).range([20, 0])
 			chart=barChart()
 				.dimension(d)
 				.name_id(bName)
 				.group(dg)
 				.x(d3.scale.linear().domain(box.config.data.interval).rangeRound([0,@width-20]))
+				.y(scale.copy())
 				.tickSize(box.config.data.tickSize)
 				.tickFormat(box.config.format.axis(box.config))
 				.fill(box.config.data.colorscale)
