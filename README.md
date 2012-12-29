@@ -14,4 +14,8 @@ It is a combination of three very powerfull javascript libraries:
 * Tutorial
 * API Reference
 
+## Examples
+* United States presidential election, 2012, county-level statistics
 
+## License
+Crosslet is contributed under Apache 2.0 License
