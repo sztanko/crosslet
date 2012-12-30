@@ -46,7 +46,7 @@ crosslet.defaultDimensionConfig=
 		dataSet: crosslet.notimplemented # this can be either a url, a function that returns a url or an object
 		method: d3.tsv # what is the data format of the file? Use d3.tsv or d3.csv
 		preformat: (dd) -> ((d) -> +d)
-		tickSize: 5 # how many ticks do you want to see on the scale. 
+		ticks: 4 # how many ticks do you want to see on the scale. 
 		colorscale: d3.scale.linear().domain([1,10,20]).range(["green","yellow", "red"]).interpolate(d3.cie.interpolateLab) # color scale of data
 		exponent: 1
 	format:

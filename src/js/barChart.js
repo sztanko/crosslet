@@ -211,10 +211,15 @@ barChart=function() {
       return chart;
     };
 
-    chart.tickSize = function(_) {
+    chart.ticks = function(a) {
       if (!arguments.length) return tickSize;
-      tickSize = _;
-      axis.ticks(tickSize)
+      ticks = a;
+      if(a.length){
+        axis.tickValues(ticks);
+        //console.log(ticks);
+        }
+      else
+        axis.ticks(ticks);
       return chart;
     };
     

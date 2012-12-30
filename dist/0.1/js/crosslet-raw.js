@@ -211,10 +211,15 @@ barChart=function() {
       return chart;
     };
 
-    chart.tickSize = function(_) {
+    chart.ticks = function(a) {
       if (!arguments.length) return tickSize;
-      tickSize = _;
-      axis.ticks(tickSize)
+      ticks = a;
+      if(a.length){
+        axis.tickValues(ticks);
+        //console.log(ticks);
+        }
+      else
+        axis.ticks(ticks);
       return chart;
     };
     
@@ -346,7 +351,7 @@ crosslet.defaultDimensionConfig = {
         return +d;
       };
     },
-    tickSize: 5,
+    ticks: 4,
     colorscale: d3.scale.linear().domain([1, 10, 20]).range(["green", "yellow", "red"]).interpolate(d3.cie.interpolateLab),
     exponent: 1
   },
@@ -679,11 +684,12 @@ crosslet.PanelView = (function(_super) {
     }
     t2 = new Date().getTime();
     this.cube = crossfilter(this.rows);
-    getRounder = function(m1, m2, w) {
-      var t;
+    getRounder = function(m1, m2, w, exp) {
+      var scale, t;
       t = 5 * (m2 - m1) / w;
+      scale = d3.scale.pow().exponent(exp).range([m1 / t, m2 / t]).domain([m1 / t, m2 / t]);
       return function(d) {
-        return t * Math.floor(+d / t);
+        return t * scale.invert(Math.floor(scale(+d / t)));
       };
     };
     groups = {};
@@ -703,14 +709,10 @@ crosslet.PanelView = (function(_super) {
       d = this.cube.dimension(function(dd) {
         return dd[bName];
       });
-      dg = d.group(getRounder(box.config.data.interval[0], box.config.data.interval[1], this.width - 20));
+      dg = d.group(getRounder(box.config.data.interval[0], box.config.data.interval[1], this.width - 20, box.config.data.exponent));
       box.graph.empty();
-      if (box.config.data.exponent === 1) {
-        scale = d3.scale.linear().clamp(true).range([20, 0]);
-      } else {
-        scale = d3.scale.pow().exponent(box.config.data.exponent).clamp(true).range([20, 0]);
-      }
-      chart = barChart().dimension(d).name_id(bName).group(dg).x(d3.scale.linear().domain(box.config.data.interval).rangeRound([0, this.width - 20])).y(scale.copy()).tickSize(box.config.data.tickSize).tickFormat(box.config.format.axis(box.config)).fill(box.config.data.colorscale);
+      scale = d3.scale.linear().clamp(true).range([20, 0]);
+      chart = barChart().dimension(d).name_id(bName).group(dg).x(d3.scale.pow().exponent(box.config.data.exponent).domain(box.config.data.interval).rangeRound([0, this.width - 20])).y(scale.copy()).ticks(box.config.data.ticks).tickFormat(box.config.format.axis(box.config)).fill(box.config.data.colorscale);
       chart.on("brush", brushevent(box, this));
       chart.on("brushend", this.renderCubes);
       box.chart = chart;
