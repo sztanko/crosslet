@@ -148,8 +148,8 @@ class crosslet.BoxView extends Backbone.View
 		@legend={}
 		@legend.all=$("<div class='legend'></div>")
 		@legend.text=$("<div class='legendText'></div>")
-		@legend.text_p=$("<div class='legendText'></div>")
-		@legend.text_range=$("<div class='legendRange'></div>")
+		@legend.text_p=$("<div class='legendText_p'></div>")
+		@legend.text_range=$("<div class='legendText_range'></div>")
 		@legend.text.append(@legend.text_p).append(@legend.text_range)
 		@legend.form=$("<div class='legendForm'></div>")
 		@legend.form_p=$("<div class='legendForm_p'></div>")

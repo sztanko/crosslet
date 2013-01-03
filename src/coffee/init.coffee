@@ -57,7 +57,7 @@ crosslet.defaultDimensionConfig=
 	render:
 		legend: (d,el) -> # thats the title of the box
 			f= if d.title then d.title else d.data.field_func(d)
-			html= '<h2>' +f+ '<h2>' 
+			html= '<h2>' +f+ '</h2>' 
 			el.html(html)			
 		range: (d,el) -> # that's the part which shows the current range
 			html= "<p><span class='m0'>"+d.format.short(d)(d.filter[0])+"</span> &ndash; <span class='m1'>"+d.format.short(d)(d.filter[1])+"</span></p>"

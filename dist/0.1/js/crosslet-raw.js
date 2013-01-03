@@ -773,8 +773,8 @@ crosslet.BoxView = (function(_super) {
     this.legend = {};
     this.legend.all = $("<div class='legend'></div>");
     this.legend.text = $("<div class='legendText'></div>");
-    this.legend.text_p = $("<div class='legendText'></div>");
-    this.legend.text_range = $("<div class='legendRange'></div>");
+    this.legend.text_p = $("<div class='legendText_p'></div>");
+    this.legend.text_range = $("<div class='legendText_range'></div>");
     this.legend.text.append(this.legend.text_p).append(this.legend.text_range);
     this.legend.form = $("<div class='legendForm'></div>");
     this.legend.form_p = $("<div class='legendForm_p'></div>");
