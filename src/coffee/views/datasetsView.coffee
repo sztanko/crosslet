@@ -15,7 +15,7 @@ class crosslet.PanelView extends Backbone.View
 			@boxes[o]=new crosslet.BoxView(e,@config.dimensions[o],@,o)
 			$(@el).append(e)
 		@boxes[@active].setActive(true)
-		@renderMap=_.debounce(@_renderMap,200)
+		@renderMap=_.debounce(@_renderMap,300)
 		return @boxes
 
 	loaded: ()->

@@ -373,7 +373,7 @@ crosslet.defaultDimensionConfig = {
     legend: function(d, el) {
       var f, html;
       f = d.title ? d.title : d.data.field_func(d);
-      html = '<h2>' + f + '<h2>';
+      html = '<h2>' + f + '</h2>';
       return el.html(html);
     },
     range: function(d, el) {
@@ -588,7 +588,7 @@ crosslet.PanelView = (function(_super) {
       $(this.el).append(e);
     }
     this.boxes[this.active].setActive(true);
-    this.renderMap = _.debounce(this._renderMap, 200);
+    this.renderMap = _.debounce(this._renderMap, 300);
     return this.boxes;
   };
 
