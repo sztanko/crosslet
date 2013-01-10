@@ -433,7 +433,7 @@ crosslet.DataStore = (function() {
       if (!this.data[d[this.idField]]) this.data[d[this.idField]] = {};
       for (k in d) {
         v = d[k];
-        if (!_.isNaN(+v)) this.data[d[this.idField]][k] = +v;
+        if (v !== "" && !_.isNaN(+v)) this.data[d[this.idField]][k] = +v;
       }
     }
     this.isDataLoaded = true;

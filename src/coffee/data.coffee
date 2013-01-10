@@ -21,7 +21,7 @@ class crosslet.DataStore
 			#debugger if d[@idField]=='F85679'
 			@data[d[@idField]]={} if not @data[d[@idField]]
 			for k,v of d
-				@data[d[@idField]][k]=+v if not _.isNaN(+v)
+				@data[d[@idField]][k]=+v if v!="" and not _.isNaN(+v)
 		@isDataLoaded=true
 		callback(data) if callback
 
