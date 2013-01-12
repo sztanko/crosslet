@@ -1,4 +1,5 @@
 uglify="uglifyjs"
+lessc="lessc"
 #uglify="cat"
 version="0.1"
 
@@ -32,3 +33,11 @@ done
 cat $cx >> $cxf
 cat $cx | $uglify > $cxm
 cat $cxf | $uglify > $cxfm
+
+d="../dist/$version/css"
+rm -rf $d
+mkdir -p $d
+cssf="$d/crosslet.css"
+cssfm="$d/crosslet-min.css"
+$lessc ../src/less/*.less > $cssf
+$lessc --yui-compress ../src/less/*.less > $cssf
