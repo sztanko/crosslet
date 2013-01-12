@@ -1,0 +1,108 @@
+<!doctype html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="en"> <![endif]-->
+<!--[if IE 7]>    <html class="no-js lt-ie9 lt-ie8" lang="en"> <![endif]-->
+<!--[if IE 8]>    <html class="no-js lt-ie9" lang="en"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en"> <!--<![endif]-->
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Crosslet test</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width">
+    
+    <link rel="stylesheet/less" type="text/css" href="less/styles.less" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/less.js/1.3.1/less.min.js" type="text/javascript"></script>
+     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.4/leaflet.css" />
+     <script src="http://cdn.leafletjs.com/leaflet-0.4.4/leaflet.js"></script>
+
+</head>
+<body>
+    <div id="content" class="container">
+        <div id="map"></div>
+</div>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.4.2/underscore-min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/d3/2.10.0/d3.v2.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/backbone.js/0.9.2/backbone-min.js"></script>
+<script src="crosslet.js"></script>
+<script type="text/javascript">
+var f = function() { return function(d){
+  return d3.format(",.2f")(d)+"%"
+};};
+
+var inp = function() {  return d3.format(",.2f") };
+
+var config = {
+  map: {
+    leaflet: {
+      key: "fe623ce312234f8f9333bbee72d4a176",
+      styleId: 64657,
+      attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>'
+    },
+    view: {
+      center: [40.42, -98.73],
+      zoom:4
+    },
+    geo: {
+      url: "data/us_counties.topo.json",
+      name_field: "NAME",
+      id_field: "GEOID",
+      topo_object: "us_counties"
+    }
+  },
+  data: {
+    version: "1.0",
+    id_field: "fips"
+  },
+  dimensions: {
+    total: {
+      title: "Population",
+      data: {
+        dataSet: "data/us_elect_county.csv",
+        field: "total"
+      },
+      
+    },
+    obama: {
+      title: "Obama",
+      data: {
+        dataSet: "data/us_elect_county.csv",
+        field: "obama_p",
+        colorscale: d3.scale.linear().domain([1,20]).range(["#AAAAFF","blue"])//.interpolate(d3.cie.interpolateLab)
+      },
+      format: { short: f,long: f, input: inp},
+    },  
+    romney: {
+      title: "Romney",
+      data: {
+        dataSet: "data/us_elect_county.csv",
+        field: "romney_p",
+        colorscale: d3.scale.linear().domain([1,20]).range(["#FFAAAA","red"])//.interpolate(d3.cie.interpolateLab)
+      },
+      format: { short: f,long: f,input: inp},
+    },
+    other: {
+      title: "Votes for others",
+      data: {
+        dataSet: "data/us_elect_county.csv",
+        field: "other_p",
+        colorscale: d3.scale.linear().domain([1,20]).range(["#AAFFAA","green"]).interpolate(d3.cie.interpolateLab)
+      },
+      format: { short: f,long: f,input: inp},
+    },
+    },
+  
+  defaults: {
+    colorscale: d3.scale.linear().domain([1, 10, 20]).range(["green", "yellow", "red"]).interpolate(d3.cie.interpolateLab),
+    opacity: 0.7,
+    order: ["obama","romney","other"],
+    active: "obama"
+  },
+};
+
+console.log(config);
+a=new crosslet.MapView($("#map"),config);
+</script>
+</body>
+</html>

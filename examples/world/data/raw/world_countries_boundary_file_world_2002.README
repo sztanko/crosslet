@@ -1,0 +1,18 @@
+World Countries Boundary File, World, 2002
+
+This shapefile is a compilation of 2 different sources and has been edited in order to update international changes. It is fairly simplified therefore the geometries are basic. Many of the worlds smaller islands are not included. The original source is DIVA-GIS. Some new shapes were created and some names changed. Then, alternative names and country codes were added to create more joining options. Population and area were joined from the world boundry file from thematicmapping.org. 
+
+Attributes:
+NAME: Country Name - Country Name from DIVA-GIS
+ISO_3_CODE: Iso 3 Code Country - Alternative ISO 3 letter country code from Thematic Mapping (ISO 3166-1 Alpha-3 Country Code)
+ISO_2_CODE: Iso 2 Code Country - ISO 2 letter country code
+AREA: Area - Area (Land area, FAO Statistics (2002)) in Km sq.
+NAME_1: Country Name - Alternative Country Name from DIVA-GIS
+GMI_CNTRY: ISO 3 Code Country - ISO 3 letter country code from DIVA-GIS
+
+REGION: Region - Region from DIVA-GIS
+POP2005: Population 2005 - Population 2005 from Thematic Mapping (World Population Prospects (2005))
+NAME_12: Country name - Country Name from Thematic Mapping
+
+
+exported on Mon Nov 05 16:10:50 -0500 2012
