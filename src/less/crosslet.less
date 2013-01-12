@@ -13,7 +13,7 @@
 	-o-transition: @prop @time; /* Opera */
 }
 
-.crosslet{
+.crosslet, .crosslet *{
 font-family: georgia, "times new roman", times, serif;
 
 .crosslet_panel{
@@ -54,6 +54,7 @@ font-family: georgia, "times new roman", times, serif;
 			margin: 0px;
 			margin-bottom: 4px;
 			text-align: center;
+			line-height:1.3em;
 		}
 		p{
 			margin: 0px;
@@ -61,7 +62,11 @@ font-family: georgia, "times new roman", times, serif;
 		select, input[type="text"] {
 			background-color: @inactive;
 			width: auto;
+			padding: 0px;
 			padding-left: 4px;
+			height: 12px;
+			line-height: 13px;
+			font-size: 12px;
 			//border: none;
 			text-align: center;
 			border: 1px solid @inactive;

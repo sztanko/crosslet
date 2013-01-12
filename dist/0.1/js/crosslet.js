@@ -765,7 +765,7 @@ crosslet.defaultDimensionConfig = {
       return d.format.short(d);
     },
     input: function(d) {
-      return d.format.short(d);
+      return d3.format(".2f");
     },
     axis: function(d) {
       return d.format.short(d);

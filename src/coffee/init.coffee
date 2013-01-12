@@ -52,7 +52,7 @@ crosslet.defaultDimensionConfig=
 	format:
 		short: (d) -> d3.format(",.2f") # used to display in ranges
 		long: (d) -> d.format.short(d) # use to display on hover
-		input: (d) -> d.format.short(d) # how to show it in the filter inputs
+		input: (d) -> d3.format(".2f") # how to show it in the filter inputs
 		axis: (d) -> d.format.short(d) # the format of axis
 	render:
 		legend: (d,el) -> # thats the title of the box
