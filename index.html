@@ -180,7 +180,7 @@ var config = {
   },
   dimensions: {
     corruption: {
-      title: "Corruption index, lower is better",
+      title: "Corruption index (higher is better)",
       data: {
         colorscale: d3.scale.linear().domain([1, 10, 20]).range([ "red", "yellow","green"]).interpolate(d3.cie.interpolateLab),
         dataSet: "examples/world/data/data.tsv",
