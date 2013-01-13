@@ -1,5 +1,7 @@
-crosslet
+crosslet 
 ========
+
+See [Crosslet page](http://sztanko.github.com/crosslet/) for documentation and examples.
 
 **Crosslet** is a small javascript widget for interactive visualisation and analysis of geostatistical datasets, e.g. GDP per country, election results for each region of the country, etc. You can also use it for comparing multiple features.
 
