@@ -8,14 +8,7 @@ It is a combination of three very powerfull javascript libraries:
 * [Crossfilter](http://square.github.com/crossfilter/), a library for exploring large multivariate datasets in the browser.
 * [D3](http://d3js.org/), used for manipulating documents based on data.
 
-## Resources
-
-* Introduction
-* Tutorial
-* API Reference
-
-## Examples
-* United States presidential election, 2012, county-level statistics
+See [Crosslet page](http://sztanko.github.com/crosslet/) for documentation and examples.
 
 ## License
 Crosslet is contributed under Apache 2.0 License
