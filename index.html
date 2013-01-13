@@ -29,7 +29,7 @@
 
   </head>
     <body>
-  
+  <!--
         <div class="navbar navbar-inverse">
             <div class="navbar-inner">
                 <div class="container">
@@ -50,18 +50,36 @@
 </li>
 
                  </ul>
-                    </div><!--/.nav-collapse -->
+                    </div>
                 </div>
             </div>
         </div>
-<div class="container">
-<div class="hero-unit">
+-->
 
+<div class="container">
+  <div class="row"><div class="span12">
+      <div id="map">
+      </div>
+    </div></div>
+<div class="row">
+<div class="span6">
     <h1>Crosslet</h1>
-    <p> javascript widget for interactive visualisation and analysis of geostatistical datasets</p>
-    <p>
-      <a href="https://github.com/sztanko/crosslet/blob/master/dist/crosslet-0.1.zip?raw=true" class="btn btn-primary btn-large" >Download Crosslet</a>
-    </p>
+    
+<p><strong>Crosslet</strong> is a free small javascript widget for interactive visualisation and analysis of geostatistical datasets. You can also use it for visualizing and comparing multivariate datasets.</p>
+
+<p>It is a combination of three very powerfull javascript libraries:</p>
+
+<ul>
+<li>
+<a href="http://leafletjs.com/">Leaflet</a>, an elegant and beautiful mapping solution, and</li>
+<li>
+<a href="http://square.github.com/crossfilter/">Crossfilter</a>, a library for exploring large multivariate datasets in the browser.</li>
+<li>
+<a href="http://d3js.org/">D3</a>, a data driven way of manipulating objects.</li>
+</ul>
+<p>Crosslet also supports <a href="https://github.com/mbostock/topojson/">TopoJSON</a>, a GeoJSON extension that allows to present geometry in a highly compact way.</p>
+  
+<a href="https://github.com/sztanko/crosslet/blob/master/dist/crosslet-0.1.zip?raw=true" class="btn btn-primary btn-large" >Download Crosslet</a>  
     <!--<ul>
       <li>
         <a href="http://github.com/sztanko/crosslet">GitHub project</a>
@@ -77,15 +95,53 @@
       </li>
     </ul> -->
   </div>
+  <div class="span6">
+      
+    
+<h2>Documentation &amp; Tutorials</h2>
 
+<ul>
+<li><a href="https://github.com/sztanko/crosslet/wiki">Introduction, download and installation instructions</a></li>
+<li><a href="https://github.com/sztanko/crosslet/wiki/Developer's-Reference">Developer's Reference</a></li>
+<li>Tutorials:
+<ul>
+  <li>TODO</li>
+  <!-- <li><a href="tutorials_world.html">Creating a simple world map.</a></li> -->
+</ul>
+</li>
+<li>Examples:
+<ul>
+  <li><a href="examples/us/">US election results per county</a></li>
+  <li><a href="examples/nhs/">GP patients satisfaction survey (England)</a> - 9000 areas, might be very slow in non webkit browsers.</li>
+  <li><a href="examples/census/">UK census 2011: religions in England and Wales</a></li>
+</ul>
+</li>
+</ul>
+  
+<h3>Github</h3>
+<ul>
+  <li><a href="https://github.com/sztanko/crosslet/">Github page</a></li>
+  <li><a href="https://github.com/sztanko/crosslet/wiki">Wiki</a></li>
+  <li><a href=""></a></li>
+</ul>
+
+  </div>
+</div>
   
     <div class="row">
-      
-    </div>
-    <div class="row"><div class="span12">
-      <div id="map">
+<div class="span6"><h2>Useful links</h2>
+<ul>
+  <li><a href="http://visual.ly/using-color-maps">Using Color in Maps</a>, by Visual.ly</li>
+  <li><a href="http://bost.ocks.org/mike/map/">Let's make a map</a>, from Mike Bostock</li>
+  <li><a href="http://bost.ocks.org/mike/leaflet/">D3 + Leaflet</a>, the basic concept behind Crosslet</li>
+  <li><a href="http://www.guardian.co.uk/science/blog/2012/jan/06/correlation-causation">Correlation is not causation</a>, Nathan Greens' article on the fact that <a href="http://en.wikipedia.org/wiki/Correlation_does_not_imply_causation">correlation does not imply causation</a>.</li>
+</ul></div>
+      <div class="span6">
+        <h2>Disclaimer</h2>
+        <p>Crosslet uses some latest web technologies including SVG, therefore it is not compatible with older browsers and browser which do not support SVG. Complex maps with more then a thousand items might cause Crosslet perform slower on non webkit based maps.</p>
       </div>
-    </div></div>
+    </div>
+    
   </div>
 
 
@@ -98,6 +154,8 @@
 <script type="text/javascript" src="js/crosslet.js"></script>
 <script type="text/javascript">
 var axisf=function(){ return function(d){return Math.round(d*10)/10+"%";}};
+var yearsf =function(){ return Math.round};
+
 var config = {
   map: {
     leaflet: {
@@ -121,12 +179,17 @@ var config = {
   },
   dimensions: {
     corruption: {
-      title: "Corruption index",
+      title: "Corruption index, lower is better",
       data: {
         colorscale: d3.scale.linear().domain([1, 10, 20]).range([ "red", "yellow","green"]).interpolate(d3.cie.interpolateLab),
         dataSet: "examples/world/data/data.tsv",
         field: "corruption"
       },
+      format: {
+        short: function() {return Math.round},
+        input: function() {return Math.round},
+
+      }
       
     },  
     gdp: {
@@ -136,6 +199,13 @@ var config = {
         dataSet: "examples/world/data/data.tsv",
         field: "gdp"
       },
+      format: {
+        short: function(){return function(d) {return "$"+d3.format(",")(d)}},
+
+        input: function(){return Math.round},
+        axis: function(){return function(d) {return "$"+Math.round(d/1000)+"k"}},
+
+      }
     
     },  
     gini: {
@@ -147,12 +217,19 @@ var config = {
       },
     },
     le: {
-      title: "Life expectancy",
+      title: "Life expectancy, years",
       data: {
         colorscale: d3.scale.linear().domain([1, 10, 20]).range([ "red", "yellow","green"]).interpolate(d3.cie.interpolateLab),
         dataSet: "examples/world/data/data.tsv",
         field: "life_expectancy"
       },
+      format:{
+        short: function(dd) { return function(d){return Math.round(d)+" years"}},
+        long: function(dd) { return function(d){return Math.round(d)+" years"}},
+        input: function() {return Math.round},
+        axis: function(dd) { return function(d){return Math.round(d)+"y"}},
+
+      }
     },
     democracy: {
       title: "Democracy Index",

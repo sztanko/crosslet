@@ -29,8 +29,8 @@
 <script type="text/javascript">
 var percentf=function() { return function(d){ return Math.round(d*100)+"%";}}
 var inputf=function() { return function(d){ return Math.round(d*100)/100;}}
-var pref=function() {return function(d){ if(+d<0) d=0; return d;}}
-var pref2=function() {return function(d){ if(+d<0) d=0; return Math.min(d,0.6);}}
+var pref=function() {return function(d){ if(+d<0) d=null; return d;}}
+var pref2=function() {return function(d){ if(+d<0) return null; return Math.min(d,0.6);}}
 var config = {
   map: {
     leaflet: {
