@@ -47,4 +47,6 @@ $lessc ../src/less/*.less > $cssf
 $lessc --yui-compress ../src/less/*.less > $cssfm
 
 zipname="crosslet-$version.zip"
-zip "../dist/$zipname" "../dist/$version"
+cd ../dist/
+rm $zipname
+zip -r "$zipname" "$version"

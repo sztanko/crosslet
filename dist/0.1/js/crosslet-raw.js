@@ -804,14 +804,15 @@ crosslet.BoxView = (function(_super) {
   };
 
   BoxView.prototype.dataLoaded = function() {
-    var f, id, preformatter, val, _ref;
+    var f, id, pd, preformatter, val, _ref;
     this.data = {};
     f = this.config.data.field_func(this.config);
     preformatter = this.config.data.preformat(this.config);
     _ref = this.parent.ds.data;
     for (id in _ref) {
       val = _ref[id];
-      if (_.isNumber(val[f])) this.data[id] = preformatter(val[f]);
+      if (_.isNumber(val[f])) pd = preformatter(val[f]);
+      if (_.isNumber(pd)) this.data[id] = pd;
     }
     if (!this.config.data.interval) {
       this.config.data.interval = [_.min(_.values(this.data)), _.max(_.values(this.data))];
