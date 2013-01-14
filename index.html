@@ -201,7 +201,7 @@ var config = {
         field: "gdp"
       },
       format: {
-        short: function(){return function(d) {return "$"+d3.format(",")(d)}},
+        short: function(){return function(d) {return "$"+d3.format(",")(Math.round(d))}},
 
         input: function(){return Math.round},
         axis: function(){return function(d) {return "$"+Math.round(d/1000)+"k"}},
