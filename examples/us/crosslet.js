@@ -1066,7 +1066,7 @@ crosslet.PanelView = (function(_super) {
   };
 
   PanelView.prototype.createCube = function() {
-    var bName, box, brushevent, chart, d, dg, getRounder, groups, int, js_bName, js_box, key, keys, o, row, scale, t1, t15, t2, _i, _j, _len, _len2, _ref, _ref2, _ref3;
+    var bName, box, brushevent, chart, d, dg, getRounder, groups, int, js_bName, js_box, key, keys, o, row, t1, t15, t2, yscale, _i, _j, _len, _len2, _ref, _ref2, _ref3;
     this.rows = [];
     t1 = new Date().getTime();
     keys = _.map(_.values(this.boxes), function(b) {
@@ -1113,8 +1113,8 @@ crosslet.PanelView = (function(_super) {
       });
       dg = d.group(getRounder(box.config.data.interval[0], box.config.data.interval[1], this.width - 20, box.config.data.exponent));
       box.graph.empty();
-      scale = d3.scale.linear().clamp(true).range([20, 0]);
-      chart = barChart().dimension(d).name_id(bName).group(dg).x(d3.scale.pow().exponent(box.config.data.exponent).domain(box.config.data.interval).rangeRound([0, this.width - 20])).y(scale.copy()).ticks(box.config.data.ticks).tickFormat(box.config.format.axis(box.config)).fill(box.config.data.colorscale);
+      yscale = d3.scale.linear().clamp(true).range([20, 0]);
+      chart = barChart().dimension(d).name_id(bName).group(dg).x(d3.scale.pow().exponent(box.config.data.exponent).domain(box.config.data.interval).rangeRound([0, this.width - 20])).y(yscale.copy()).ticks(box.config.data.ticks).tickFormat(box.config.format.axis(box.config)).fill(box.config.data.colorscale);
       chart.on("brush", brushevent(box, this));
       chart.on("brushend", this.renderCubes);
       box.chart = chart;
@@ -1206,14 +1206,15 @@ crosslet.BoxView = (function(_super) {
   };
 
   BoxView.prototype.dataLoaded = function() {
-    var f, id, preformatter, val, _ref;
+    var f, id, pd, preformatter, val, _ref;
     this.data = {};
     f = this.config.data.field_func(this.config);
     preformatter = this.config.data.preformat(this.config);
     _ref = this.parent.ds.data;
     for (id in _ref) {
       val = _ref[id];
-      if (_.isNumber(val[f])) this.data[id] = preformatter(val[f]);
+      if (_.isNumber(val[f])) pd = preformatter(val[f]);
+      if (_.isNumber(pd)) this.data[id] = pd;
     }
     if (!this.config.data.interval) {
       this.config.data.interval = [_.min(_.values(this.data)), _.max(_.values(this.data))];
@@ -1221,9 +1222,8 @@ crosslet.BoxView = (function(_super) {
     if (!this.config.filter) {
       this.config.filter = [_.min(_.values(this.data)), _.max(_.values(this.data))];
     }
-    if (!this.config.scale) {
-      this.config.scale = d3.scale.quantize().domain(this.config.data.interval).range([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20]);
-    }
+    this.config.scale = d3.scale.pow().exponent(this.config.data.exponent).domain(this.config.data.interval).rangeRound([0, 20]);
+    this.config.scale.name = "yes";
     this.render();
     return this.parent.loaded();
   };
@@ -1316,7 +1316,7 @@ crosslet.MapView = (function(_super) {
   function MapView() {
     this._renderMap = __bind(this._renderMap, this);
     this.hover = __bind(this.hover, this);
-    this.moveMove = __bind(this.moveMove, this);
+    this.mouseMove = __bind(this.mouseMove, this);
     this.reset = __bind(this.reset, this);
     this.beforezoom = __bind(this.beforezoom, this);
     this.project = __bind(this.project, this);
@@ -1356,7 +1356,7 @@ crosslet.MapView = (function(_super) {
         return "path_" + d.properties[_this.config.map.geo.id_field];
       }).on("mouseover", function(d) {
         return _this.hover(d);
-      }).on("mousemove", _this.moveMove);
+      }).on("mousemove", _this.mouseMove);
       _this.reset();
       _this.map.on("viewreset", _this.reset);
       _this.map.on("zoomstart", _this.beforezoom);
@@ -1394,7 +1394,7 @@ crosslet.MapView = (function(_super) {
     return true;
   };
 
-  MapView.prototype.moveMove = function() {
+  MapView.prototype.mouseMove = function() {
     var br, dx, dy, matrix, pos, trp;
     br = jQuery.browser;
     pos = d3.mouse(this.svg.node());

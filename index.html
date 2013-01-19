@@ -184,7 +184,8 @@ var config = {
       data: {
         colorscale: d3.scale.linear().domain([1, 10, 20]).range([ "red", "yellow","green"]).interpolate(d3.cie.interpolateLab),
         dataSet: "examples/world/data/data.tsv",
-        field: "corruption"
+        field: "corruption",
+
       },
       format: {
         short: function() {return Math.round},
@@ -198,7 +199,10 @@ var config = {
       data: {
         colorscale: d3.scale.linear().domain([1, 10, 20]).range([ "red", "yellow","green"]).interpolate(d3.cie.interpolateLab),
         dataSet: "examples/world/data/data.tsv",
-        field: "gdp"
+        field: "gdp",
+        exponent:0.4,
+        ticks: [2000,10000,25000,50000,80000]
+
       },
       format: {
         short: function(){return function(d) {return "$"+d3.format(",")(Math.round(d))}},
@@ -222,7 +226,8 @@ var config = {
       data: {
         colorscale: d3.scale.linear().domain([1, 10, 20]).range([ "red", "yellow","green"]).interpolate(d3.cie.interpolateLab),
         dataSet: "examples/world/data/data.tsv",
-        field: "life_expectancy"
+        field: "life_expectancy",
+        exponent: 2.4
       },
       format:{
         short: function(dd) { return function(d){return Math.round(d)+" years"}},

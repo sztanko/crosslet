@@ -52,7 +52,7 @@ var config = {
   },
   dimensions: {
     christian: {
-      title: "Christian",
+      title: "Christian population, %",
       data: {
         dataSet: "data/religion.tsv",
         field: "Christian"
@@ -62,7 +62,7 @@ var config = {
       },
     },  
     buddhist: {
-      title: "Buddhist",
+      title: "Buddhist population, %",
       data: {
         dataSet: "data/religion.tsv",
         field: "Buddhist"
@@ -72,19 +72,19 @@ var config = {
       },
     },  
     muslim: {
-      title: "Muslim",
+      title: "Muslim population, %",
       data: {
         dataSet: "data/religion.tsv",
         field: "Muslim",
-        exponent: 0.2,
-        ticks: [0.1,1,3,12,30]
+        exponent: 0.05,
+        ticks: [0.1,0.3,1,3,10,30]
       },
       format:{
         axis: axisf
       },
     },  
     hindu: {
-      title: "Hindu",
+      title: "Hindu population, %",
       data: {
         dataSet: "data/religion.tsv",
         field: "Hindu",
@@ -96,7 +96,7 @@ var config = {
       },
     },  
     jewish: {
-      title: "Jewish",
+      title: "Jewish population, %",
       data: {
         dataSet: "data/religion.tsv",
         field: "Jewish"
@@ -106,7 +106,7 @@ var config = {
       },
     },
     sikh: {
-      title: "Sikh",
+      title: "Sikh population, %",
       data: {
         dataSet: "data/religion.tsv",
         field: "Sikh"
@@ -116,7 +116,7 @@ var config = {
       },
     }, 
     no_religion: {
-      title: "No religion",
+      title: "Atheist population, %",
       data: {
         dataSet: "data/religion.tsv",
         field: "no religion"
@@ -138,7 +138,6 @@ var config = {
     },       
   },
   defaults: {
-    colorscale: d3.scale.linear().domain([1, 10, 20]).range(["green", "yellow", "red"]).interpolate(d3.cie.interpolateLab),
     opacity: 0.7,
     order: ["christian","muslim","hindu","no_religion","not_stated"],
     active: "no_religion"
