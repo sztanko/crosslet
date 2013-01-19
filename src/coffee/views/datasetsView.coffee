@@ -101,7 +101,7 @@ class crosslet.PanelView extends Backbone.View
 			
 			box.graph.empty()
 			#if box.config.data.exponent==1
-			scale=d3.scale.linear().clamp(true).range([20, 0])
+			yscale=d3.scale.linear().clamp(true).range([20, 0])
 			#else
 			#	scale=d3.scale.pow().exponent(box.config.data.exponent).clamp(true).range([20, 0])
 			chart=barChart()
@@ -109,7 +109,7 @@ class crosslet.PanelView extends Backbone.View
 				.name_id(bName)
 				.group(dg)
 				.x(d3.scale.pow().exponent(box.config.data.exponent).domain(box.config.data.interval).rangeRound([0,@width-20]))
-				.y(scale.copy())
+				.y(yscale.copy())
 				.ticks(box.config.data.ticks)
 				.tickFormat(box.config.format.axis(box.config))
 				.fill(box.config.data.colorscale)
@@ -190,7 +190,9 @@ class crosslet.BoxView extends Backbone.View
 		@config.filter=[_.min(_.values @data), _.max(_.values @data)] if not @config.filter
 		#console.log("Interval is")
 		#console.log(@interval)
-		@config.scale=d3.scale.quantize().domain(@config.data.interval).range([0..20]) if not @config.scale
+		#@config.scale=d3.scale.quantize().domain(@config.data.interval).range([0..20]) if not @config.scale
+		@config.scale=d3.scale.pow().exponent(@config.data.exponent).domain(@config.data.interval).rangeRound([0,20])# if not @config.scale
+		@config.scale.name= "yes"
 		@render()
 		@parent.loaded()
 

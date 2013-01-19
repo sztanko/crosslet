@@ -40,7 +40,7 @@ class crosslet.MapView extends Backbone.View
 				.append("path")
 				.attr("id",(d) => "path_"+d.properties[@config.map.geo.id_field])
 				.on("mouseover",(d) => @hover(d))
-				.on("mousemove",@moveMove)
+				.on("mousemove",@mouseMove)
 			@reset()
 			@map.on("viewreset", @reset)
 			@map.on("zoomstart", @beforezoom)
@@ -80,7 +80,7 @@ class crosslet.MapView extends Backbone.View
 		@g.style("display","inline")
 		#	@path_done=true
 		return true
-	moveMove: () =>
+	mouseMove: () =>
 		br=jQuery.browser
 		pos=d3.mouse(@svg.node())
 		if br.mozilla
