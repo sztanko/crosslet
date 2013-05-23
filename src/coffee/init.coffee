@@ -16,6 +16,7 @@ crosslet.changeSelect= (select, val) ->
 crosslet.defaultConfig=
 		map:
 			leaflet:
+				url: "http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png" #Tiles server's url
 				key: "--your key--" #Obtain your own key at http://developers.cloudmade.com/projects
 				styleId: 64657 #Get any style from here: http://maps.cloudmade.com/editor
 				attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>'

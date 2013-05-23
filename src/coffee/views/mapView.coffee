@@ -11,8 +11,8 @@ class crosslet.MapView extends Backbone.View
 		@hoverFunc=@default_hover
 		$(@el).attr("class","crosslet")
 		@map= L.map(el[0]).setView(@config.map.view.center, @config.map.view.zoom)
-	
-		L.tileLayer("http://{s}.tile.cloudmade.com/{key}/{styleId}/256/{z}/{x}/{y}.png", @config.map.leaflet).addTo(@map);
+
+		L.tileLayer(@config.map.leaflet.url, @config.map.leaflet).addTo(@map);
 		@control=$("<div class='crosslet_panel'></div>")
 		
 		@info = L.Control.extend(
