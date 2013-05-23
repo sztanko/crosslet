@@ -18,7 +18,7 @@ crosslet.defaultConfig=
 			leaflet:
 				key: "--your key--" #Obtain your own key at http://developers.cloudmade.com/projects
 				styleId: 64657 #Get any style from here: http://maps.cloudmade.com/editor
-				attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>'
+				attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, <a href="http://www.openstreetmap.org/copyright">ODbL</a>, Imagery © <a href="http://cloudmade.com">CloudMade</a>'
 			view:
 				center: [51.505, -0.09] #thats center of London. 
 				zoom: 11 #zoomlevel for abig city
