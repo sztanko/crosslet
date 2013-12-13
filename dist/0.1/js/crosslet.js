@@ -1375,6 +1375,7 @@ crosslet.MapView = (function(_super) {
 
   function MapView() {
     this._renderMap = __bind(this._renderMap, this);
+    this.getSelection = __bind(this.getSelection, this);
     this.hover = __bind(this.hover, this);
     this.mouseMove = __bind(this.mouseMove, this);
     this.reset = __bind(this.reset, this);
@@ -1486,6 +1487,10 @@ crosslet.MapView = (function(_super) {
     this.hoverElementText.text(text);
     this.hoverElementTextBB = this.hoverElementText.node().getBBox();
     return this.hoverElementRect.attr("width", this.hoverElementTextBB.width + 10).attr("height", this.hoverElementTextBB.height + 10).attr("x", this.hoverElementTextBB.x - 5).attr("y", this.hoverElementTextBB.y - 5);
+  };
+
+  MapView.prototype.getSelection = function() {
+    return this.panel.getSelection();
   };
 
   MapView.prototype.default_hover = function(data, value) {

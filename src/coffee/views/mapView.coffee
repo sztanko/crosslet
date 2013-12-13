@@ -111,6 +111,8 @@ class crosslet.MapView extends Backbone.View
 		.attr("y",@hoverElementTextBB.y-5)
 		#console.log(text)
 
+	getSelection: () =>
+		return @panel.getSelection()
 	default_hover: (data,value) ->
 		##console.log(@config.map.geo.name_field)
 		data.properties[@config.map.geo.name_field] + " - " + value
