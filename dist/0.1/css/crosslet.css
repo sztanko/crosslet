@@ -5,16 +5,13 @@
 .crosslet .crosslet_panel,
 .crosslet * .crosslet_panel {
   /*display: none;*/
-
   /*width: 950px;*/
-
   color: #565656;
   top: -10px;
 }
 .crosslet .crosslet_panel .box,
 .crosslet * .crosslet_panel .box {
   /*float:left;*/
-
   display: inline-block;
   vertical-align: top;
   width: 215px;
@@ -23,18 +20,13 @@
   transition: background-color 0.2s;
   -moz-transition: background-color 0.2s;
   /* Firefox 4 */
-
   -webkit-transition: background-color 0.2s;
   /* Safari and Chrome */
-
   -o-transition: background-color 0.2s;
   /* Opera */
-
   /*background: -webkit-linear-gradient(left top, white, darken(white,5%));*/
-
   border-bottom-right-radius: 15px;
   /*opacity: 0.9;*/
-
   border-bottom-left-radius: 15px;
   border: 1px solid #d6d6d6;
   border-top: none;
@@ -87,20 +79,15 @@
   transition: background-color 0.2s;
   -moz-transition: background-color 0.2s;
   /* Firefox 4 */
-
   -webkit-transition: background-color 0.2s;
   /* Safari and Chrome */
-
   -o-transition: background-color 0.2s;
   /* Opera */
-
   /*text-align: center;*/
-
 }
 .crosslet .crosslet_panel .box .graph,
 .crosslet * .crosslet_panel .box .graph {
   /*.transition(height);*/
-
   display: none;
 }
 .crosslet .crosslet_panel .box .graph,
@@ -148,13 +135,10 @@
   transition: height 0.2s;
   -moz-transition: height 0.2s;
   /* Firefox 4 */
-
   -webkit-transition: height 0.2s;
   /* Safari and Chrome */
-
   -o-transition: height 0.2s;
   /* Opera */
-
 }
 .crosslet .crosslet_panel .box.selected,
 .crosslet * .crosslet_panel .box.selected,
@@ -166,15 +150,11 @@
   transition: background-color 0.2s;
   -moz-transition: background-color 0.2s;
   /* Firefox 4 */
-
   -webkit-transition: background-color 0.2s;
   /* Safari and Chrome */
-
   -o-transition: background-color 0.2s;
   /* Opera */
-
   /*min-height: 110px;*/
-
   color: black;
 }
 .crosslet .crosslet_panel .box.selected .legendForm,
@@ -202,22 +182,17 @@
   transition: background-color 0.2s;
   -moz-transition: background-color 0.2s;
   /* Firefox 4 */
-
   -webkit-transition: background-color 0.2s;
   /* Safari and Chrome */
-
   -o-transition: background-color 0.2s;
   /* Opera */
-
 }
 .crosslet .crosslet_panel .box.selected .graph,
 .crosslet * .crosslet_panel .box.selected .graph,
 .crosslet .crosslet_panel .box:hover .graph,
 .crosslet * .crosslet_panel .box:hover .graph {
   /*border: 1px dotted @inactive-border;*/
-
   /*height: 55px;*/
-
   margin: 5px;
   margin-bottom: 2px;
   display: block;
@@ -225,7 +200,6 @@
 			  
 			
 			}*/
-
 }
 .crosslet .crosslet_panel .box.selected .graph svg,
 .crosslet * .crosslet_panel .box.selected .graph svg,
@@ -235,13 +209,10 @@
   transition: height 0.2s;
   -moz-transition: height 0.2s;
   /* Firefox 4 */
-
   -webkit-transition: height 0.2s;
   /* Safari and Chrome */
-
   -o-transition: height 0.2s;
   /* Opera */
-
 }
 .crosslet .crosslet_panel .box.selected .graph .axis,
 .crosslet * .crosslet_panel .box.selected .graph .axis,
@@ -251,13 +222,10 @@
   transition: display 0.2s;
   -moz-transition: display 0.2s;
   /* Firefox 4 */
-
   -webkit-transition: display 0.2s;
   /* Safari and Chrome */
-
   -o-transition: display 0.2s;
   /* Opera */
-
 }
 .crosslet .crosslet_panel .box.selected .graph .brush .resize,
 .crosslet * .crosslet_panel .box.selected .graph .brush .resize,
@@ -279,12 +247,10 @@
 .crosslet * .box:not(.selected) .foreground.bar {
   fill: #bcbcbc;
   /*fill: steelblue;*/
-
 }
 .crosslet .box.selected #imd .foreground.bar,
 .crosslet * .box.selected #imd .foreground.bar {
   /* fill: inherit; */
-
 }
 .crosslet svg g.crosslet_geometry {
   fill-opacity: 0.5;
@@ -293,7 +259,6 @@
   fill: white;
   stroke: none;
   /*stroke: black; */
-
 }
 .crosslet svg g.crosslet_geometry path:hover {
   fill-opacity: 0.2;

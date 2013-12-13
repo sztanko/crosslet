@@ -23,12 +23,17 @@ class crosslet.PanelView extends Backbone.View
 		#console.log("Loads left: "+@numloads)
 		@createCube() if @numloads<=0
 
-	_renderMap: ()=>
+	getSelection: ()=>
 		abox=@boxes[@active]
 		adata=abox.getFilteredData()
 		keys=@intersection(_.map(_.values(@boxes),(b) ->_.keys(b.getFilteredData()).sort()))
 		out={}
 		out[k]=adata[k] for k in keys
+		return out
+
+	_renderMap: ()=>
+		abox=@boxes[@active]
+		out = @getSelection()
 		f=abox.config.format.long(abox.config)
 		@parent.renderMap(out,((v) -> abox.config.data.colorscale(abox.config.scale(v))),(data,value) => data.properties[@config.map.geo.name_field] + " - " + f(value))
 		return @
