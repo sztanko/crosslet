@@ -1389,6 +1389,7 @@ crosslet.MapView = (function(_super) {
     var _this = this;
     this.config = crosslet.createConfig(crosslet.defaultConfig, config);
     this.geoURL = this.config.map.geo.url;
+    this.version = "1.1";
     this.opacity = this.config.defaults.opacity;
     this.ds = new crosslet.DataStore(this.config);
     this.el = el;
