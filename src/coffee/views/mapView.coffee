@@ -2,6 +2,7 @@ class crosslet.MapView extends Backbone.View
 	initialize: (el,config) ->
 		@config=crosslet.createConfig(crosslet.defaultConfig,config)
 		@geoURL=@config.map.geo.url
+		@version="1.1"
 		#@config.data.id_field = "id" if not @config.data.id_field
 		#@config.map.geo.id_field = "id" if not @config.map.geo.id_field
 
