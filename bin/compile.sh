@@ -4,7 +4,7 @@ cd "$(dirname "$0")"
 uglify="uglifyjs"
 lessc="lessc"
 #uglify="cat"
-version="0.1"
+version="1.1"
 
 d="../dist/$version/js"
 cxf="$d/crosslet.js"
