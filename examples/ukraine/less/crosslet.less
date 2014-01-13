@@ -1,0 +1,249 @@
+@inactive: #EFEFEF;
+@inactive-border: darken(@inactive,10%);
+@panel-text: darken(@inactive,60%);
+
+@active: white;
+@active-border: darken(@active,30%);
+
+.transition(@prop,@time: 0.2s)
+{
+	transition: @prop @time;
+	-moz-transition: @prop @time; /* Firefox 4 */
+	-webkit-transition: @prop @time; /* Safari and Chrome */
+	-o-transition: @prop @time; /* Opera */
+}
+
+.crosslet, .crosslet *{
+font-family: georgia, "times new roman", times, serif;
+
+.crosslet_panel{
+	/*display: none;*/
+	/*width: 950px;*/
+	color: @panel-text;
+	//position: relative;
+	top: -10px;
+	//z-index: 1000;
+	.box{
+		/*float:left;*/
+		display: inline-block;
+		vertical-align: top;
+		width: 215px;
+		margin-left: 5px;
+		background-color: @inactive;
+		.transition(background-color);
+		/*background: -webkit-linear-gradient(left top, white, darken(white,5%));*/
+		border-bottom-right-radius: 15px;
+		/*opacity: 0.9;*/
+		border-bottom-left-radius: 15px;
+		
+		border: 1px solid @inactive-border;
+		border-top: none;
+		box-shadow: 0 10px 14px -10px rgba(0, 0, 0, .8);
+		padding: 5px;
+		font-size: 11px;
+		text-align: center;
+		line-height: 10px;
+
+		.legendForm{
+			display:none;
+		}
+		.legendText, .legendForm{
+			
+		h2{
+			font-size: 1.1em;
+			margin: 0px;
+			margin-bottom: 4px;
+			text-align: center;
+			line-height:1.3em;
+		}
+		p{
+			margin: 0px;
+		}
+		select, input[type="text"] {
+			background-color: @inactive;
+			width: auto;
+			padding: 0px;
+			padding-left: 4px;
+			height: 12px;
+			line-height: 13px;
+			font-size: 12px;
+			//border: none;
+			text-align: center;
+			border: 1px solid @inactive;
+			border-radius: 6px;
+			font-weight: bold;
+			margin: 0px;
+			.transition(background-color);
+			/*text-align: center;*/
+		}
+		}
+		
+		.graph{
+			/*.transition(height);*/
+			display: none;
+			
+		}
+
+		
+
+		.graph  {
+		  display: inline-block;
+		  margin-bottom: 0px;
+		}
+
+		.background.bar {
+		  fill: darken(@inactive,10%);
+		}
+
+
+		.axis{
+			display: none;
+		}
+		.axis path, .axis line {
+		  fill: none;
+		  stroke: #000;
+		  shape-rendering: crispEdges;
+		  
+		}
+
+		.axis text {
+		  font: 10px sans-serif;
+		}
+
+		.brush rect.extent {
+		  fill: steelblue;
+		  fill-opacity: .125;
+		}
+		.brush .resize{
+			display: none;
+		}
+		.brush .resize path {
+		  fill: #eee;
+		  stroke: #666;
+		}
+
+		svg{
+			height: 25px;
+			.transition(height);
+		}
+	}
+	.box.selected, .box:hover{
+		opacity: 1;
+		//background: -webkit-linear-gradient(left top, white, white);
+		background: @active;
+		
+
+		border-color: @active-border;
+		.transition(background-color);
+		/*min-height: 110px;*/
+		color: black;
+
+		.legendForm{
+			display:block;
+		} 
+		.legendText{
+			display:none;
+		}
+		
+	select, input[type="text"]{
+			background-color: @active;
+			border: 1px solid @active-border;
+			.transition(background-color);
+			
+			
+		}
+
+		.graph{
+			/*border: 1px dotted @inactive-border;*/
+			/*height: 55px;*/
+			margin: 5px;
+			margin-bottom: 2px;
+			display: block;
+			
+			svg{
+			height: 45px;
+			.transition(height);
+			}
+			.axis{
+			display: inline;
+			.transition(display);
+			}	
+			.brush .resize{
+			display: inline;
+			}
+			.background.bar {
+			  fill: darken(@active,20%);
+			}
+			/*
+			  
+			
+			}*/
+			
+
+		}
+	}
+
+
+}
+
+.box:not(.selected):hover{
+	.foreground.bar {
+			  fill: darken(@active,50%);
+			
+}
+}
+.box:not(.selected) .foreground.bar {
+		  fill: darken(@inactive,20%);
+		  /*fill: steelblue;*/
+		}
+.box.selected #imd .foreground.bar{
+				/* fill: inherit; */
+			}
+
+}
+
+
+
+.crosslet{ 
+
+	svg {
+		g.crosslet_geometry 
+		{
+			fill-opacity: 0.5;
+			path{
+			fill: white;
+			stroke: none;
+			/*stroke: black; */
+			}
+			path:hover{
+				fill-opacity: 0.2;
+				stroke-width: 2px;
+				stroke: white;
+				box-shadow: -5px -5px -5px -5px rgba(0, 0, 0, .8);
+			}
+		}
+		.hover{
+			display: none;
+			rect{
+				stroke:none;
+				fill-opacity:0.5;
+				fill: @inactive;
+				border-radius: 5px;
+
+			}
+			text{
+				font-size: 12px;
+				fill: black;
+				font-weight: bold;
+			}
+		}
+	}
+	svg:hover{
+		.hover {
+			display: inline;
+
+		}
+	}
+
+}
+
